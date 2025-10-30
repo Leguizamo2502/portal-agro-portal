@@ -10,7 +10,7 @@ services:
     image: ${IMAGE_NAME}:latest
     restart: always
     ports:
-      - "4200:${PORT}"           # 4200 host → 80 contenedor
+      - "4203:${PORT}"           # 4200 host → 80 contenedor
     env_file:
       - .env
     networks:
