@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  # 🌐 Frontend Portal-Agro - develop
-  portal-agro-front-develop:
+  # 🌐 Frontend Portal-Agro - staging
+  portal-agro-front-staging:
     container_name: ${CONTAINER_NAME}
     build:
       context: ../..   # raíz del proyecto Angular
@@ -16,7 +16,7 @@ services:
     networks:
       - portal-agro_network          # 👈 valor literal, no variable
     labels:
-      - com.portal-agro.environment=develop
+      - com.portal-agro.environment=staging
 
 # 🔗 Red externa compartida con backend
 networks:
