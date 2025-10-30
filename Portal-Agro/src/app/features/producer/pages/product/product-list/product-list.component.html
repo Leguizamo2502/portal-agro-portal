@@ -1,0 +1,28 @@
+<div class="top">
+  <app-button
+    text="Crear Producto"
+    color="primary"
+    icon="add"
+    redirectTo="/account/producer/management/product/create"
+  >
+  </app-button>
+
+  
+  <div class="top">
+    <app-container-card-flex
+      [type]="'product'"
+      [items]="products"
+      [showActions]="true"
+      [loading]="loadingProducts"
+      [skeletonCount]="3"
+      (editProduct)="onEdit($event)"
+      (deleteProduct)="onDelete($event)"
+      (editStock)="onEditStock($event)"
+    >
+    </app-container-card-flex>
+  </div>
+  <div *ngIf="products.length === 0" class="empty">
+    No tienes productos todavía, crea productos para que puedas recibir pedidos.
+  </div>
+  
+</div>

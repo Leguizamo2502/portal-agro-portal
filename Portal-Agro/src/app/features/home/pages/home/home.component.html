@@ -1,0 +1,31 @@
+<app-carrusel id="carrusel"></app-carrusel>
+
+<app-container-card
+  id="ultimosAgregados"
+  [title]="'Últimos Agregados'"
+  [showHeader]="true"
+  [loading]="loadingProducts"
+  [skeletonCount]="6"
+  [products]="products">
+</app-container-card>
+
+  <div class="banner-farming">
+    <app-farming-banner></app-farming-banner>
+  </div>
+
+<app-container-card
+  id="productosDestacados"
+  [title]="'Productos Destacados'"
+  [showHeader]="true"
+  [loading]="loadingFeatured"
+  [skeletonCount]="6"
+  [products]="productFeatured">
+</app-container-card>
+
+<app-button class="d-flex justify-content-center mt-3"
+  id="explorarBtn"
+  [text]="'Explorar Productos'"
+  [type]="'button'"
+  [redirectTo]="'/home/product'">
+</app-button>
+

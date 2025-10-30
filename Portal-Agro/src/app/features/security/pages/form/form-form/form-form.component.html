@@ -1,0 +1,101 @@
+<div class="form-wrapper-transparent">
+  <h2 class="titleForm">{{ title }}</h2>
+
+  <form (ngSubmit)="save()" [formGroup]="form" class="form-container">
+    <!-- Nombre -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="custom-mat-field">
+        <mat-label>Nombre</mat-label>
+        <input
+          matInput
+          placeholder="Ingrese el nombre del formulario"
+          formControlName="name"
+          (input)="onInputChange($event, 'name')"
+          required
+          minlength="5"
+          maxlength="100"
+        />
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          El nombre es obligatorio.
+        </mat-error>
+        <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+          El nombre debe tener al menos 5 caracteres.
+        </mat-error>
+        <mat-error *ngIf="form.get('name')?.hasError('maxlength')">
+          El nombre no puede exceder 100 caracteres.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Descripción -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="custom-mat-field">
+        <mat-label>Descripción</mat-label>
+        <textarea
+          matInput
+          rows="3"
+          placeholder="Describa el propósito del formulario"
+          formControlName="description"
+          (input)="onInputChange($event, 'description')"
+          required
+          minlength="10"
+          maxlength="300"
+        ></textarea>
+        <mat-error *ngIf="form.get('description')?.hasError('required')">
+          La descripción es obligatoria.
+        </mat-error>
+        <mat-error *ngIf="form.get('description')?.hasError('minlength')">
+          La descripción debe tener al menos 10 caracteres.
+        </mat-error>
+        <mat-error *ngIf="form.get('description')?.hasError('maxlength')">
+          La descripción no puede exceder 300 caracteres.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- URL -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="custom-mat-field">
+        <mat-label>URL</mat-label>
+        <input
+          matInput
+          placeholder="https://"
+          formControlName="url"
+          required
+          maxlength="200"
+          (keydown.space)="$event.preventDefault()"
+          (input)="onUrlInput($event)"
+        />
+        <mat-error *ngIf="form.get('url')?.hasError('required')">
+          La URL es obligatoria.
+        </mat-error>
+        <mat-error *ngIf="form.get('url')?.hasError('urlInvalid')">
+          La URL no tiene un formato válido (debe ser absoluta y comenzar con http/https).
+        </mat-error>
+        <mat-error *ngIf="form.get('url')?.hasError('maxlength')">
+          La URL no debe superar 200 caracteres.
+        </mat-error>
+        <mat-error *ngIf="form.get('url')?.hasError('noSpaces')">
+          La URL no debe contener espacios.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Acciones -->
+    <div class="form-actions cont-botones">
+      <app-button
+        [text]="'Guardar'"
+        [icon]="'save'"
+        [type]="'submit'"
+        [disabled]="form.invalid">
+      </app-button>
+
+      <app-button
+        [text]="'Cancelar'"
+        [icon]="'cancel'"
+        [color]="'secondary'"
+        [back]="true">
+      </app-button>
+    </div>
+  </form>
+</div>

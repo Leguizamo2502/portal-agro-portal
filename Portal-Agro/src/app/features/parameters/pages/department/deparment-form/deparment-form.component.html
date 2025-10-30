@@ -1,0 +1,35 @@
+<div class="form-wrapper-transparent">
+    <h2 class="titleForm">{{ title }}</h2>
+    <div class="form-inner">
+        <form (submit)="save()" [formGroup]="form" class="form-container">
+            <div class="form-field">
+                <mat-form-field appearance="outline" class="custom-mat-field">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput [formControl]="form.controls.name" placeholder="Ingrese el nombre del Departamento"
+                        required />
+                    <mat-error *ngIf="form.controls.name.hasError('required')">
+                        El nombre es obligatorio
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="form-actions cont-botones">
+                <app-button [text]="'Guardar'" [icon]="'save'" [type]="'submit'" [disabled]="form.invalid">
+                </app-button>
+
+                <!-- Opción A: volver atrás -->
+                <app-button [text]="'Cancelar'" [icon]="'cancel'" [color]="'secondary'" [back]="true">
+                </app-button>
+
+                <!-- Opción B: ir fijo a la lista de departamentos
+      <app-button
+        [text]="'Cancelar'"
+        [icon]="'cancel'"
+        [color]="'secondary'"
+        redirectTo="/account/parameters/department">
+      </app-button>
+      -->
+            </div>
+        </form>
+    </div>
+</div>

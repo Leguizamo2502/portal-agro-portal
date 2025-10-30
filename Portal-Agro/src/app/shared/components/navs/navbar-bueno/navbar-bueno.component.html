@@ -1,0 +1,83 @@
+<nav class="navbar custom-navbar sticky-top">
+    <div class="container-fluid">
+        <!-- Desktop Layout -->
+        <div class="d-none d-lg-flex w-100 align-items-center">
+            <!-- Logo y título -->
+            <div class="navbar-brand-section">
+                <img src="logos/logo.png" alt="" class="logo">
+                <a class="navbar-brand color-title ms-2" routerLink="/home">Portal Agro-comercial del Huila</a>
+            </div>
+            <div class="btn-tuto">
+                    <button class="tour-btn" (click)="startTour()"><i class="bi bi-info-circle"></i></button>
+                </div>
+            <!-- Búsqueda centrada -->
+            <form class="search-form mx-auto" role="search">
+                <!-- <input class="form-control search-input" type="search" placeholder="Buscar" />
+                <button class="search-btn" type="submit">
+                    <mat-icon>search</mat-icon>
+                </button> -->
+            </form>
+
+            <!-- Iconos derecha -->
+            <div class="desktop-icons">
+                <a class="nav-link custom-text" routerLink="/home">Inicio</a>
+                <a class="nav-link custom-text" routerLink="/home/product">Productos</a>
+
+                <app-button [text]="'Inicia Sersion/Registrate'" [redirectTo]="'/auth/login'" *appIfLoggedOut></app-button>
+                <!-- <a class="nav-link custom-text" routerLink="/home/inicio" *appIfLoggedIn>
+                    <mat-icon>notifications</mat-icon>
+                </a> -->
+                <!-- <a class="nav-link custom-text" routerLink="/home/inicio">
+                    <mat-icon>shopping_cart</mat-icon>
+                </a> -->
+                <div class="dropdown" *appIfLoggedIn>
+                    <a class="nav-link custom-text dropdown-toggle" role="button" data-bs-toggle="dropdown">
+                        <mat-icon>account_circle</mat-icon>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" routerLink="/account">Mi Cuenta</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" (click)="logOut()">Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Layout -->
+        <div class="d-lg-none w-100">
+            <!-- Primera fila mobile -->
+            <div class="d-flex align-items-center mobile-top-row">
+                <button class="navbar-toggler" type="button" (click)="toggleSidebar()" *ngIf="isAccountRoute || router.url == '/account'">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                    
+                <form class="search-form-mobile flex-grow-1 mx-3" role="search">
+                    <!-- <input class="form-control search-input" type="search" placeholder="¿Qué buscas?" />
+                    <button class="search-btn" type="submit">
+                        <mat-icon>search</mat-icon>
+                    </button> -->
+                </form>
+                <!-- tour driverJs -->
+                
+                
+                <div class="mobile-icons">
+                    <!-- <a class="custom-text" routerLink="/home/inicio">
+                        <mat-icon>notifications</mat-icon>
+                    </a> -->
+                    <a class="custom-text" routerLink="/account">
+                        <mat-icon>account_circle</mat-icon>
+                    </a>
+                    <!-- <a class="custom-text" routerLink="/home/inicio">
+                        <mat-icon>shopping_cart</mat-icon>
+                    </a> -->
+                </div>
+            </div>
+            
+            <!-- Segunda fila mobile: botones de navegación -->
+            <div class="mobile-nav-buttons">
+                <a class="mobile-nav-btn" routerLink="/home">Inicio</a>
+                <a class="mobile-nav-btn" routerLink="/home/product">Productos</a>
+            </div>
+        </div>
+    </div>
+</nav>

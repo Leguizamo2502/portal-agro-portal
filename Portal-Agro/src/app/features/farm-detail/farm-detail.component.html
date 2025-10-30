@@ -1,0 +1,118 @@
+<!-- <app-button
+  [type]="'button'"
+  [color]="'primary'"
+  [text]="'Volver'"
+  [icon]="'arrow_back'"
+  [back]="true"
+  class="detail-header to-overlay">
+</app-button>
+
+<div *ngIf="loadingFarm" class="container my-5">
+  <p class="text-muted">Cargando finca…</p>
+</div>
+
+<div *ngIf="!loadingFarm && errorMsg" class="container my-5">
+  <p class="text-danger">{{ errorMsg }}</p>
+</div>
+
+<div *ngIf="!loadingFarm && !errorMsg && farm as f" class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+
+      <div class="farm-card shadow-sm">
+
+        <div class="farm-header px-4 pt-3 pb-2">
+          <h2 class="farm-title mb-1">{{ f.name }}</h2>
+          <div class="farm-subtitle text-muted">{{ f.cityName }}, {{ f.departmentName }}</div>
+        </div>
+
+
+        <div class="farm-content px-4 pb-4">
+
+          <div class="d-flex flex-wrap gap-4 justify-content-around w-100">
+            <div class="content-image-product d-flex gap-4">
+
+              <div *ngIf="f.images?.length" class="d-flex flex-column gap-2 thumbnails">
+                <img
+                  *ngFor="let img of f.images; trackBy: trackByImage"
+                  [src]="img.imageUrl"
+                  (click)="changeMainImage(img.imageUrl)"
+                  class="thumbnail-img img-thumbnail"
+                  alt="miniatura"
+                />
+              </div>
+
+
+              <div class="flex-fill d-flex align-items-center justify-content-center main-image" style="max-width: 400px;">
+                <img
+                  [src]="mainImage"
+                  class="img-fluid rounded shadow main-img"
+                  alt="principal"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-4 mt-3 w-100">
+            <div class="col-12">
+              <div class="map-wrapper border rounded shadow-sm">
+                <ng-container *ngIf="mapUrl as m; else noMap">
+                  <iframe
+                    class="map-iframe"
+                    [src]="m"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
+                </ng-container>
+                <ng-template #noMap>
+                  <div class="p-3 text-muted">Sin coordenadas para mostrar mapa.</div>
+                </ng-template>
+              </div>
+            </div>
+
+
+            <div class="col-12">
+              <div class="info-card border rounded shadow-sm p-3">
+                <div class="info-grid">
+                  <div class="info-item">
+                    <div class="info-label">Tamaño de la finca</div>
+                    <div class="info-value">{{ f.hectares }} hectáreas</div>
+                  </div>
+
+                  <div class="info-item">
+                    <div class="info-label">Dueño</div>
+                    <div class="info-value">{{ f.producerName }}</div>
+                  </div>
+
+                  <div class="info-item">
+                    <div class="info-label">Ubicación</div>
+                    <div class="info-value">{{ f.cityName }}, {{ f.departmentName }}</div>
+                  </div>
+
+                  <div class="info-item">
+                    <div class="info-label">Altitud</div>
+                    <div class="info-value">{{ f.altitude }} m</div>
+                  </div>
+
+                  <div class="info-item">
+                    <div class="info-label">Latitud</div>
+                    <div class="info-value">{{ f.latitude }}</div>
+                  </div>
+
+                  <div class="info-item">
+                    <div class="info-label">Longitud</div>
+                    <div class="info-value">{{ f.longitude }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+</div> -->

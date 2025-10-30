@@ -1,0 +1,73 @@
+<div class="form-wrapper-transparent">
+  <h2 class="titleForm">{{ title }}</h2>
+
+  <form (ngSubmit)="save()" [formGroup]="form" class="form-container">
+    <!-- Nombre -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="custom-mat-field">
+        <mat-label>Nombre</mat-label>
+        <input
+          matInput
+          placeholder="Ingrese el nombre del permiso"
+          formControlName="name"
+          (input)="onInputChange($event, 'name')"
+          required
+          minlength="5"
+          maxlength="100"
+        />
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          El nombre es obligatorio.
+        </mat-error>
+        <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+          El nombre debe tener al menos 5 caracteres.
+        </mat-error>
+        <mat-error *ngIf="form.get('name')?.hasError('maxlength')">
+          El nombre no puede exceder 100 caracteres.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Descripción -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="custom-mat-field">
+        <mat-label>Descripción</mat-label>
+        <textarea
+          matInput
+          placeholder="Describa el propósito del permiso"
+          rows="3"
+          formControlName="description"
+          (input)="onInputChange($event, 'description')"
+          required
+          minlength="10"
+          maxlength="300"
+        ></textarea>
+        <mat-error *ngIf="form.get('description')?.hasError('required')">
+          La descripción es obligatoria.
+        </mat-error>
+        <mat-error *ngIf="form.get('description')?.hasError('minlength')">
+          La descripción debe tener al menos 10 caracteres.
+        </mat-error>
+        <mat-error *ngIf="form.get('description')?.hasError('maxlength')">
+          La descripción no puede exceder 300 caracteres.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Acciones -->
+    <div class="form-actions cont-botones">
+      <app-button
+        [text]="'Guardar'"
+        [icon]="'save'"
+        [type]="'submit'"
+        [disabled]="form.invalid">
+      </app-button>
+
+      <app-button
+        [text]="'Cancelar'"
+        [icon]="'cancel'"
+        [color]="'secondary'"
+        [back]="true">
+      </app-button>
+    </div>
+  </form>
+</div>

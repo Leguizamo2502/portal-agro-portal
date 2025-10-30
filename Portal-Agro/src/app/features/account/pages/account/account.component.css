@@ -1,0 +1,42 @@
+/* account.component.css */
+
+/* Grid de dos columnas: sidebar + contenido */
+.layout-container {
+  display: grid;
+  grid-template-columns: 250px 1fr; /* El sidebar es de 250px y el contenido ocupa el resto */
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  gap: 0; /* Eliminar espacio entre el sidebar y el contenido */
+}
+
+/* Contenido principal */
+.contenido-principal {
+  grid-column: 2;
+  grid-row: 2;
+  overflow: hidden; /* Evitar scroll */
+  padding: 2rem;
+}
+
+/* Caja blanca interior */
+.contenido {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  min-height: 400px;
+  max-height: 80vh;
+  overflow: hidden; /* Evitar scroll */
+}
+
+@media (max-width: 768px) {
+  .layout-container {
+    grid-template-columns: 1fr; /* En móvil, el sidebar ocupa toda la fila */
+    grid-template-rows: auto auto 1fr;
+  }
+  .contenido-principal {
+    grid-column: 1;
+    grid-row: 3;
+    margin: 0;
+    padding: 1rem;
+  }
+}

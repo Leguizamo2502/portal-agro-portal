@@ -1,0 +1,70 @@
+<!-- city-form.component.html -->
+<div class="form-wrapper-transparent">
+  <h2 class="titleForm">{{ title }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="form-container">
+    <!-- Nombre -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="custom-mat-field">
+        <mat-label>Nombre</mat-label>
+        <input
+          matInput
+          formControlName="name"
+          placeholder="Nombre de la ciudad"
+          maxlength="100"
+          required
+        />
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          El nombre es obligatorio.
+        </mat-error>
+        <!--<mat-error *ngIf="form.get('name')?.hasError('whitespace')">
+          El nombre no puede estar en blanco.
+        </mat-error> -->
+        <mat-error *ngIf="form.get('name')?.hasError('trimLength')">
+          El nombre debe tener entre 3 y 100 caracteres.
+        </mat-error>
+        <mat-error *ngIf="form.get('name')?.hasError('backend')">
+          {{ form.get('name')?.getError('backend') }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Departamento -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="custom-mat-field">
+        <mat-label>Departamento</mat-label>
+        <mat-select formControlName="departmentId" required>
+          <mat-option *ngFor="let dpto of departments" [value]="dpto.id">
+            {{ dpto.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('departmentId')?.hasError('required')">
+          El departamento es obligatorio.
+        </mat-error>
+        <mat-error *ngIf="form.get('departmentId')?.hasError('positiveInt')">
+          Debe seleccionar un departamento válido.
+        </mat-error>
+        <mat-error *ngIf="form.get('departmentId')?.hasError('backend')">
+          {{ form.get('departmentId')?.getError('backend') }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Acciones -->
+    <div class="form-actions cont-botones">
+      <app-button
+        [text]="'Guardar'"
+        [icon]="'save'"
+        [type]="'submit'"
+        [disabled]="form.invalid">
+      </app-button>
+
+      <app-button
+        [text]="'Cancelar'"
+        [icon]="'cancel'"
+        [color]="'secondary'"
+        [back]="true">
+      </app-button>
+    </div>
+  </form>
+</div>

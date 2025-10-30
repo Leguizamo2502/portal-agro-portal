@@ -1,0 +1,13 @@
+ <app-button
+  text="Crear Departamento"
+  color="primary"
+  icon="add"
+  redirectTo="/account/parameters/department/create">
+</app-button>
+<app-table
+  [columns]="columns"
+  [data]="departments"
+  [searchableKeys]="['name']"
+  (edit)="onEdit($event)"
+  (delete)="onDelete($event)">
+</app-table>

@@ -1,0 +1,368 @@
+/* You can add global styles to this file, and also import other style files */
+@import "leaflet/dist/leaflet.css";
+
+/* guia para los usuarios */
+@import "driver.js/dist/driver.css";
+
+.driver-popover-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.driver-popover-description {
+  font-size: 14px;
+  color: #555;
+}
+
+.driver-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.tour-btn{
+  border:none;
+  font-size: 1.2rem;
+  background-color: #19641d;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.tour-btn:hover{
+  background-color: #189b1f;
+}
+/* Estilo general para el popover */
+.driver-popover {
+  font-family: 'Arial', sans-serif;
+  border-radius: 12px;
+  /* background: #02ca06; */
+  color: #333;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* Estilo solo para el paso del carrusel */
+.driver-carrusel-popover {
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: white;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+/* Estilos de los títulos */
+.driver-popover-title {
+  margin-bottom: 24px;
+  color: #1e4620;             /* verde oscuro */
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 8px;
+}
+
+/* Estilos de la descripción */
+.driver-popover-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4b5563;             /* gris medio */
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+
+/* Estilos para los botones */
+.driver-popover-footer button {
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+}
+.driver-popover-footer button:nth-child(1) {
+  background: #e0e0e0;
+  color: #333;
+}
+.driver-popover-footer button:nth-child(2) {
+  background-color: #28a745;
+  color: white;
+}
+
+
+
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f9f7f1;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+/* Habilita el área de errores/hints SOLO para tus campos con clase custom-mat-field */
+.custom-mat-field .mat-mdc-form-field-subscript-wrapper {
+  display: block !important;
+  height: auto !important;
+  min-height: 22px;         /* reserva espacio para el mensaje */
+  overflow: visible !important;
+  visibility: visible !important;
+}
+
+/* Asegura que el texto de error no esté oculto */
+.custom-mat-field .mat-mdc-form-field-error {
+  display: block !important;
+}
+
+.fondo-auth {
+  /* PUEDES CAMBIAR LA IMAGEN DE FONDO AQUÍ */
+  background-image: url("/backgrounds/fondologin.jpg");
+  background-size: cover; /* que cubra toda el área */
+  background-position: center; /* centrada */
+  background-repeat: no-repeat; /* sin repetir */
+
+  /* Fallback si no tienes imagen */
+  background-color: #2e7d32;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* 1) El título puede seguir centrado */
+.titleForm {
+  color: #2e7d32;
+  font-size: 2rem;
+  text-align: center;
+  margin: 0 0 2rem;
+  font-weight: 600;
+}
+
+/* 2) El wrapper ocupa todo el panel; el interior limita el ancho total del formulario */
+.form-wrapper-transparent {
+  background-color: transparent;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 100%;
+}
+.form-inner {
+  max-width: 640px; /* ajusta a tu gusto: 600–720px */
+  margin: 0 auto;
+}
+
+/* 3) El formulario NO centra los hijos; los estira */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* <-- clave */
+  gap: 1.5rem;
+}
+
+/* 4) El campo ocupa el 100% del ancho disponible */
+.form-field,
+.custom-mat-field,
+.mat-mdc-form-field {
+  /* selector de Angular Material */
+  width: 100%;
+}
+
+/* (opcional) Centrar el grupo de botones, no los inputs */
+.cont-botones {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/*   Titulos account*/
+.title-p {
+  font-size: 2rem;
+  color: #333;
+}
+
+/**
+cosas
+
+*/
+.top {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom{
+  margin-bottom: 1rem;
+}
+
+.leaflet-control-layers-toggle {
+  background-image: url("/leaflet/layers.png");
+}
+.leaflet-retina .leaflet-control-layers-toggle {
+  background-image: url("/leaflet/layers-2x.png");
+}
+
+/*
+
+estilos
+*/
+
+.info-container {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto; /* Centrar el contenedor */
+}
+
+/* .title { */
+  /* margin-bottom: 24px;
+  color: #1e4620;
+  font-size: 24px;
+  font-weight: 600;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 8px;
+}
+
+.subtitle {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  color: #374151;    
+  font-size: 18px;       
+  font-weight: 500;      
+} */
+
+
+
+.info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 16px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #4caf50;
+}
+
+.info-item span {
+  flex: 1;
+}
+
+.icon {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.actions-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+.actions-section app-button {
+  gap: 1rem;
+  margin-right: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .info-container {
+    padding: 16px;
+    margin: 16px;
+    max-width: calc(100% - 32px);
+  }
+  
+  /* .title {
+    font-size: 20px;
+  } */
+  
+  .info-item {
+    font-size: 14px;
+    padding: 8px;
+  }
+  
+  .icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+  }
+}
+
+
+/* ---------- Title ---------- */
+.title {
+  margin-bottom: 24px;
+  color: #1e4620;             /* verde oscuro */
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 8px;
+}
+
+/* ---------- Subtitle ---------- */
+.subtitle {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  color: #374151;             /* gris oscuro */
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* ---------- Texto general ---------- */
+.text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4b5563;             /* gris medio */
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+
+/* ---------- Responsive ---------- */
+
+/* Tablets medianas (≤1024px) */
+@media (max-width: 1024px) {
+  .title { font-size: 22px; }
+  .subtitle { font-size: 17px; }
+  .text { font-size: 15px; line-height: 1.55; }
+}
+
+/* Tablets pequeñas (≤768px) */
+@media (max-width: 768px) {
+  .title { font-size: 20px; margin-bottom: 20px; }
+  .subtitle { font-size: 16px; margin-bottom: 14px; }
+  .text { font-size: 14px; line-height: 1.5; }
+}
+
+/* Móviles (≤480px) */
+@media (max-width: 480px) {
+  .title { font-size: 18px; margin-bottom: 16px; }
+  .subtitle { font-size: 15px; margin-bottom: 12px; }
+  .text { font-size: 13px; line-height: 1.4; }
+}

@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  # 🌐 Frontend GESCOMPH - Desarrollo
+  portal-agro-front-develop:
+    container_name: ${CONTAINER_NAME}
+    build:
+      context: ../..   # raíz del proyecto Angular
+      dockerfile: Dockerfile
+    image: ${IMAGE_NAME}:latest
+    restart: always
+    ports:
+      - "4200:${PORT}"           # 4200 host → 80 contenedor
+    env_file:
+      - .env
+    networks:
+      - portal-agro_network          # 👈 valor literal, no variable
+    labels:
+      - com.portal-agro.environment=develop
+
+# 🔗 Red externa compartida con backend
+networks:
+  portal-agro_network:
+    external: true

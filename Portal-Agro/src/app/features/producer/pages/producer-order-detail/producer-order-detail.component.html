@@ -1,0 +1,137 @@
+<div class="wrapper" *ngIf="!loading && detail; else loadingTpl">
+  <div class="header">
+    <h2 class="title">Pedido #{{ detail!.id }}</h2>
+    <span class="chip" [ngClass]="chipClass(detail!.status)">
+      {{ detail!.status | statusTranslate }}
+    </span>
+  </div>
+
+  <div class="grid">
+    <!-- Columna izquierda: info -->
+    <section class="card">
+      <h3 class="title">Resumen</h3>
+      <div class="row">
+        <div class="productoS- d-flex gap-1"><div class="subtitle">
+          Producto:
+        </div>
+        <div class="text"> {{ detail!.productName }}</div>
+      </div>
+        <div class="d-flex gap-1"><div class="subtitle">Cantidad:</div>
+        <div class="text">
+          {{ detail!.quantityRequested }}
+        </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="precioUni-co d-flex gap-1">
+          <div class="subtitle ">
+            Precio unitario:
+          </div>
+          <div class="text">
+            {{ detail!.unitPrice | currency : "COP" }}
+          </div>
+        </div>
+        <div class="subtotal-cop d-flex gap-1">
+          <div class="subtitle ">Subtotal: </div>
+          <div class="text">{{ detail!.subtotal | currency : "COP" }}</div>
+        </div>
+      </div>
+      <div class="row total">
+        <div class="d-flex gap-1">
+          <div class="subtitle">Total:</div> 
+          <div class="text">
+
+            {{ detail!.total | currency : "COP" }}
+          </div>
+        </div>
+      </div>
+
+      <h3 class="mt title">Entrega</h3>
+      <div class="row">
+        <div class="d-flex gap-1"><div class="subtitle">Destinatario:</div> <div class="text">{{ detail!.recipientName }}</div></div>
+        <div class="d-flex gap-1"><div class="subtitle">Teléfono:</div> <div class="text">{{ detail!.contactPhone }}</div></div>
+      </div>
+      <div class="row">
+        <div class="col-span-2 d-flex gap-1">
+          <div class="subtitle">Dirección:</div>
+          <div class="text">
+            {{ detail!.addressLine1 }}
+
+            <ng-container *ngIf="detail!.addressLine2">, {{ detail!.addressLine2 }}</ng-container>
+            <ng-container *ngIf="detail!.cityName">, {{ detail!.cityName }}</ng-container>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="mt title">Tiempos</h3>
+      <div class="row">
+        <div class="d-flex gap-1">
+          <div class="subtitle">Creado: </div>
+          <div class="text"> {{ detail!.createAt | date : "mediumDate" : "" : "es-CO" }}</div>
+        </div>
+        <div *ngIf="detail!.producerDecisionAt">
+          <strong>Decisión productor:</strong>
+          {{ detail!.producerDecisionAt | date : "mediumDate" : "" : "es-CO" }}
+        </div>
+      </div>
+    </section>
+
+    <!-- Columna derecha: acciones / comprobante -->
+    <section class="card actions">
+      <h3 class="title">Comprobante</h3>
+      <div class="receipt" *ngIf="detail!.paymentImageUrl; else noReceipt">
+        <img
+          [src]="detail!.paymentImageUrl!"
+          alt="Comprobante"
+          (click)="openReceipt()"
+        />
+        <small class="muted">Clic para abrir en nueva pestaña</small>
+      </div>
+      <ng-template #noReceipt>
+        <p class="muted">
+          Sin comprobante
+          <ng-container *ngIf="detail!.status === 'AcceptedAwaitingPayment'">
+            (el cliente aún no lo ha subido).
+          </ng-container>
+        </p>
+      </ng-template>
+
+      <!-- Acciones por estado -->
+      <div class="btns" *ngIf="canAcceptReject">
+        <div class="btns-last-Bottom">
+          <div class="d-flex gap-2">
+            <app-button text="Rechazar" color="danger" (clicked)="reject()"></app-button>
+            <app-button text="Aceptar" color="primary" (clicked)="accept()"></app-button>
+          </div>
+          <app-button text="Volver" color="secondary" [back]="true"></app-button>
+        </div>
+      </div>
+
+
+      <div class="btns" *ngIf="canMarkPreparing">
+        <app-button text="Marcar como “Preparando”" color="primary" (clicked)="markPreparing()"></app-button>
+      </div>
+
+      <div class="btns" *ngIf="canMarkDispatched">
+        <app-button text="Marcar como “Despachado”" color="primary" (clicked)="markDispatched()"></app-button>
+      </div>
+
+      <div class="btns" *ngIf="canMarkDelivered">
+        <app-button text="Marcar “Entregado (pendiente confirmación)”" color="primary" (clicked)="markDelivered()"></app-button>
+      </div>
+
+      <div
+        *ngIf="!canAcceptReject && !canMarkPreparing && !canMarkDispatched && !canMarkDelivered"
+        class="muted"
+      >
+        No hay acciones disponibles para el estado actual.
+      </div>
+
+      
+    </section>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <p class="muted">Cargando detalle…</p>
+</ng-template>
