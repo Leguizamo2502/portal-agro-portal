@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NotificationListItem, CreateNotificationRequest } from '../../models/notifications/notification.model';
+import { NotificationListItemDto, CreateNotificationRequest } from '../../models/notifications/notification.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -14,8 +14,8 @@ export class NotificationService {
   private urlBase = environment.apiUrl + 'Notification'
 
   /** Obtiene las notificaciones no leídas del usuario */
-  getUnread(take: number = 20): Observable<NotificationListItem[]> {
-    return this.http.get<NotificationListItem[]>(`${this.urlBase}/unread?take=${take}`);
+  getUnread(take: number = 20): Observable<NotificationListItemDto[]> {
+    return this.http.get<NotificationListItemDto[]>(`${this.urlBase}/unread?take=${take}`);
   }
 
   /** Obtiene el conteo de notificaciones no leídas */
@@ -24,8 +24,8 @@ export class NotificationService {
   }
 
   /** Obtiene el historial paginado */
-  getHistory(page: number = 1, pageSize: number = 20): Observable<{ items: NotificationListItem[]; total: number }> {
-    return this.http.get<{ items: NotificationListItem[]; total: number }>(
+  getHistory(page: number = 1, pageSize: number = 20): Observable<{ items: NotificationListItemDto[]; total: number }> {
+    return this.http.get<{ items: NotificationListItemDto[]; total: number }>(
       `${this.urlBase}/history?page=${page}&pageSize=${pageSize}`
     );
   }

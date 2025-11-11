@@ -24,9 +24,15 @@
                 <a class="nav-link custom-text" routerLink="/home/product">Productos</a>
 
                 <app-button [text]="'Inicia Sersion/Registrate'" *appIfLoggedOut></app-button>
-                <a class="nav-link custom-text" routerLink="/home/inicio" *appIfLoggedIn>
+                <!-- <a class="nav-link custom-text" routerLink="/home/inicio" *appIfLoggedIn>
                     <mat-icon>notifications</mat-icon>
-                </a>
+                </a> -->
+                <app-notifications-menu
+                    *appIfLoggedIn
+                    [items]="mockNotifications"  
+                    [loading]="false"
+                    >
+                </app-notifications-menu>
                 <!-- <a class="nav-link custom-text" routerLink="/home/inicio">
                     <mat-icon>shopping_cart</mat-icon>
                 </a> -->
@@ -61,15 +67,14 @@
                 
                 
                 <div class="mobile-icons">
-                    <!-- <a class="custom-text" routerLink="/home/inicio">
-                        <mat-icon>notifications</mat-icon>
-                    </a> -->
-                    <a class="custom-text" routerLink="/account">
-                        <mat-icon>account_circle</mat-icon>
-                    </a>
-                    <!-- <a class="custom-text" routerLink="/home/inicio">
-                        <mat-icon>shopping_cart</mat-icon>
-                    </a> -->
+                <app-notifications-menu
+                    *appIfLoggedIn
+                    [items]="mockNotifications"
+                    [loading]="false">
+                </app-notifications-menu>
+                <a class="custom-text" routerLink="/account">
+                    <mat-icon>account_circle</mat-icon>
+                </a>
                 </div>
             </div>
             

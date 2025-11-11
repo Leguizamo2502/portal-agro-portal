@@ -1,4 +1,4 @@
-export interface NotificationListItem {
+export interface NotificationListItemDto {
   id: number;
   title: string;
   message: string;

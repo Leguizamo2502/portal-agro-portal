@@ -11,11 +11,13 @@ import { IfLoggedOutDirective } from "../../../../Core/directives/if-logged-out.
 import { AuthState } from '../../../../Core/services/auth/auth.state';
 import { DriverJsService } from '../../../services/driverJS/driver-js.service';
 import { Title } from 'chart.js';
+import { NotificationListItemDto } from '../../../models/notifications/notification.model';
+import { NotificationsMenuComponent } from "../../notifications-menu/notifications-menu.component";
 
 @Component({
   selector: 'app-navbar-bueno',
   standalone: true,
-  imports: [RouterLink, MatIcon, CommonModule, IfLoggedInDirective, ButtonComponent, IfLoggedOutDirective],
+  imports: [RouterLink, MatIcon, CommonModule, IfLoggedInDirective, ButtonComponent, IfLoggedOutDirective, NotificationsMenuComponent],
   templateUrl: './navbar-bueno.component.html',
   styleUrls: ['./navbar-bueno.component.css']
 })
@@ -28,6 +30,26 @@ export class NavbarBuenoComponent {
   // Inyección de DriverjService
   driverService = inject(DriverJsService);
 
+  mockNotifications:NotificationListItemDto[] =[
+  {
+    id: 1,
+    title: 'Pedido #1234 confirmado',
+    message: 'Tu pedido fue confirmado por el productor.',
+    isRead: false,
+    createAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+    relatedType: 'order',
+    relatedRoute: '/orders/1234'
+  },
+  {
+    id: 2,
+    title: 'Nuevo mensaje',
+    message: 'Tienes un nuevo mensaje de Café Los Andes.',
+    isRead: true,
+    createAt: new Date(Date.now() - 5 * 3600 * 1000).toISOString(),
+    relatedType: 'message',
+    relatedRoute: '/messages/567'
+  }
+] as const;
 
   get isAccountRoute(): boolean {
     return this.router.url.startsWith('/account');
