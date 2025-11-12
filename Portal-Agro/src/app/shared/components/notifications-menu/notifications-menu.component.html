@@ -6,7 +6,8 @@
   [matBadge]="unreadCount"
   [matBadgeHidden]="unreadCount === 0"
   matBadgeOverlap="false"
-  aria-label="Abrir notificaciones">
+  aria-label="Abrir notificaciones"
+  class="notif-trigger">
   <mat-icon>notifications</mat-icon>
 </button>
 
@@ -39,8 +40,8 @@
         </div>
       </div>
 
-      <mat-divider></mat-divider>
-      <a mat-stroked-button class="see-all" [routerLink]="pageUrl">Ver todas</a>
+      <!-- <mat-divider></mat-divider>
+      <a mat-stroked-button class="see-all" [routerLink]="pageUrl">Ver todas</a> -->
     </ng-container>
 
     <ng-template #empty>
