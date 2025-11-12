@@ -47,9 +47,15 @@ export class UserOrderDetailComponent implements OnInit {
   async load(): Promise<void> {
     this.loading = true;
     try {
-      this.detail = await firstValueFrom(this.ordersSrv.getDetailForUser(this.code));
+      this.detail = await firstValueFrom(
+        this.ordersSrv.getDetailForUser(this.code)
+      );
     } catch (err: any) {
-      Swal.fire('Error', err?.error?.message ?? 'No se pudo cargar el pedido.', 'error');
+      Swal.fire(
+        'Error',
+        err?.error?.message ?? 'No se pudo cargar el pedido.',
+        'error'
+      );
       this.detail = undefined;
     } finally {
       this.loading = false;
@@ -89,7 +95,10 @@ export class UserOrderDetailComponent implements OnInit {
         return { text: 'Despachado', cls: 'chip info' };
 
       case 'DeliveredPendingBuyerConfirm':
-        return { text: 'Entregado (pendiente de confirmación)', cls: 'chip warning' };
+        return {
+          text: 'Entregado (pendiente de confirmación)',
+          cls: 'chip warning',
+        };
 
       case 'Completed':
         return { text: 'Completado', cls: 'chip success' };
@@ -131,19 +140,36 @@ export class UserOrderDetailComponent implements OnInit {
     if (!dialog.isConfirmed) return;
 
     this.confirming = true;
-    const body: OrderConfirmRequest = { answer, rowVersion: this.detail.rowVersion };
+
+    // Loading mientras se procesa la confirmación
+    Swal.fire({
+      title: 'Procesando...',
+      text:
+        answer === 'yes' ? 'Registrando tu confirmación.' : 'Enviando reporte.',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
+    const body: OrderConfirmRequest = {
+      answer,
+      rowVersion: this.detail.rowVersion,
+    };
 
     this.ordersSrv.confirmReceived(this.code, body).subscribe({
       next: async () => {
+        Swal.close();
         await Swal.fire(
           'Hecho',
-          answer === 'yes' ? '¡Gracias por confirmar!' : 'Se registró tu reporte.',
+          answer === 'yes'
+            ? '¡Gracias por confirmar!'
+            : 'Se registró tu reporte.',
           'success'
         );
         this.load();
       },
-      error: (err) => {
-        Swal.fire(
+      error: async (err) => {
+        Swal.close();
+        await Swal.fire(
           'Error',
           err?.error?.message ?? 'No se pudo registrar la confirmación.',
           'error'
@@ -165,63 +191,28 @@ export class UserOrderDetailComponent implements OnInit {
       cancelButtonText: 'No',
       reverseButtons: true,
     });
+
     if (!ask.isConfirmed) return;
 
-    this.ordersSrv.cancelByUser(this.code, this.detail.rowVersion).subscribe({
-      next: async () => {
-        await Swal.fire('Hecho', 'Pedido cancelado.', 'success');
-        this.load();
-      },
-      error: (err) =>
-        Swal.fire(
-          'Error',
-          err?.error?.message ?? 'No se pudo cancelar el pedido.',
-          'error'
-        ),
-    });
-  }
-
-  triggerFile(el: HTMLInputElement) {
-    el.click();
-  }
-
-  async onPickPaymentFile(ev: Event) {
-    const input = ev.target as HTMLInputElement;
-    const file = input.files?.[0];
-    input.value = ''; // limpia para permitir re-seleccionar luego
-    if (!file || !this.detail) return;
-
-    if (!file.type.startsWith('image/')) {
-      Swal.fire('Atención', 'El comprobante debe ser una imagen (JPG/PNG/WEBP).', 'warning');
-      return;
-    }
-    if (file.size > this.MAX_FILE_BYTES) {
-      Swal.fire('Atención', `La imagen excede ${this.MAX_FILE_MB} MB.`, 'warning');
-      return;
-    }
-
-    const req: UploadPaymentRequest = {
-      rowVersion: this.detail.rowVersion,
-      paymentImage: file,
-    };
-
+    // Loading mientras se procesa la cancelación
     Swal.fire({
-      title: 'Subiendo comprobante…',
+      title: 'Procesando...',
+      text: 'Cancelando el pedido.',
       allowOutsideClick: false,
       didOpen: () => Swal.showLoading(),
     });
 
-    this.ordersSrv.uploadPayment(this.code, req).subscribe({
+    this.ordersSrv.cancelByUser(this.code, this.detail.rowVersion).subscribe({
       next: async () => {
         Swal.close();
-        await Swal.fire('Hecho', 'Comprobante subido.', 'success');
+        await Swal.fire('Hecho', 'Pedido cancelado.', 'success');
         this.load();
       },
       error: async (err) => {
         Swal.close();
         await Swal.fire(
           'Error',
-          err?.error?.message ?? 'No se pudo subir el comprobante.',
+          err?.error?.message ?? 'No se pudo cancelar el pedido.',
           'error'
         );
       },
