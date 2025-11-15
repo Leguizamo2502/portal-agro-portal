@@ -14,7 +14,7 @@ services:
     env_file:
       - .env
     networks:
-      - portal-agro_network          # 👈 valor literal, no variable
+      - portal-agro_network     
     labels:
       - com.portal-agro.environment=develop
 
