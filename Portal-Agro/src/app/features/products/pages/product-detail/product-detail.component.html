@@ -42,83 +42,90 @@
               class="img-fluid rounded shadow"/>
           </div>
         </div>
-        <!-- FAVORITO -->
-        <div *appIfLoggedIn>
-          <button
-            mat-icon-button
-            class="fav-btn"
-            [disabled]="disabledFavorite"
-            (click)="onFavoriteClick($event)"
-            (keydown.enter)="$event.stopPropagation()"
-            (keydown.space)="$event.stopPropagation(); $event.preventDefault()"
-            aria-label="Favorito"
-          >
-            <!-- usa product.isFavorite, NO @Input isFavorite -->
-            <mat-icon class="star-fav"
-              [fontIcon]="product.isFavorite ? 'star' : 'star_border'"
-            ></mat-icon>
-          </button>
-        </div>
 
         <!-- Información del producto -->
-        <div
-          class="info-product border rounded p-3 shadow-sm"
-          style="min-width: 434px"
-        >
-          <h3 class="mb-3 title">{{ product.name }}</h3>
+        <div class="info-product info-card border rounded p-3 shadow-sm">
 
-          <div class="mb-1 subtitle d-flex align-items-center">
-            <div class="me-1">Productor:</div>
-            <div
-              class="text-primary fw-semibold d-inline-flex align-items-center"
-              style="cursor: pointer"
-              (click)="onDetail(product)"
-            >
-              <i class="bi bi-person-circle me-1"></i>
-              {{ product.personName }}
-            </div>
-          </div>
+        <!-- Título -->
+        <h3 class="title mb-2">{{ product.name }}</h3>
 
-          <div class="mb-1 subtitle">
-            Finca:
-            <div class="text">{{ product.farmName }}</div>
-          </div>
-          <div class="mb-1 subtitle">
-            Categoría:
-            <div class="text">{{ product.categoryName }}</div>
-          </div>
-          <div class="mb-1 subtitle">
-            Tipo de unidad:
-            <div class="text">{{ product.unit }}</div>
-          </div>
-          <div class="mb-1 subtitle">
-            Stock:
-            <div class="text">{{ product.stock }}</div>
-          </div>
-          <div class="mb-1 subtitle">
-            Precio:
-            <div class="text">
-              {{ product.price | currency : "COP" : "symbol" }}
-            </div>
-          </div>
-          <div class="mb-1 subtitle">
-            Envío:
-            <div class="text">
-              {{
-                product.shippingIncluded ? "Envío gratis" : "No incluye envío"
-              }}
-            </div>
-          </div>
-          <!-- <app-button [text]="'Añadir al Pedido'" [type]="'button'" [icon]="'shopping_cart'"></app-button> -->
+        <!-- Productor -->
+        <div class="row-item d-flex align-items-center mb-1">
+          <span class="label">Productor: </span>
+          <span
+            class="value link"
+            (click)="onDetail(product)"
+          >
+            <i class="bi bi-person-circle me-1"></i>
+            {{ product.personName }}
+          </span>
+        </div>
+
+        <!-- Finca -->
+        <div class="row-item mb-1">
+          <span class="label">Finca: </span>
+          <span class="value">{{ product.farmName }}</span>
+        </div>
+
+        <!-- Categoría -->
+        <div class="row-item mb-1">
+          <span class="label">Categoría: </span>
+          <span class="value">{{ product.categoryName }}</span>
+        </div>
+
+        <!-- Unidad -->
+        <div class="row-item mb-1">
+          <span class="label">Tipo de unidad: </span>
+          <span class="value">{{ product.unit }}</span>
+        </div>
+
+        <!-- Stock -->
+        <div class="row-item mb-1">
+          <span class="label">Stock: </span>
+          <span class="value">{{ product.stock }}</span>
+        </div>
+
+        <!-- Precio -->
+        <div class="row-item price-row mb-2 mt-2">
+          <span class="label">Precio: </span>
+          <span class="price">{{ product.price | currency:'COP' }}</span>
+        </div>
+
+        <!-- Envío -->
+        <div class="row-item mb-3">
+          <span class="label">Envío: </span>
+          <span class="value">
+            {{ product.shippingIncluded ? "Envío gratis" : "No incluye envío" }}
+          </span>
+        </div>
+
+        <!-- Botones -->
+        <div class="d-flex align-items-center gap-3">
+
           <app-button
             [text]="'Hacer Pedido'"
             [type]="'button'"
             [icon]="'shopping_cart'"
             (click)="openCreateOrder()"
             [disabled]="loadingProduct || product.stock <= 0"
+          ></app-button>
+
+          <button
+            *appIfLoggedIn
+            mat-icon-button
+            class="fav-btn"
+            (click)="onFavoriteClick($event)"
+            aria-label="Favorito"
           >
-          </app-button>
+            <mat-icon class="star-fav"
+              [fontIcon]="product.isFavorite ? 'favorite' : 'favorite_border'">
+            </mat-icon>
+          </button>
+
         </div>
+
+      </div>
+
       </div>
 
       <!-- Descripción -->
