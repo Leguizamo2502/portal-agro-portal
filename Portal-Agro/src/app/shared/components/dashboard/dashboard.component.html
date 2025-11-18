@@ -44,6 +44,22 @@
         <span class="link-text" [class.hide-text]="!isOpen">Soporte</span>
       </a>
     </li>
+ 
+    <!-- Admin -->
+    <li class="nav-item" *appHasRole="['admin']">
+      <div class="nav-link submenu-toggle" (click)="toggleSubmenu('admin')">
+        <i class="bi bi-shield-lock-fill"></i>
+        <span class="link-text" [class.hide-text]="!isOpen">Administración</span>
+        <i class="bi" [class.hide-text]="!isOpen"
+          [ngClass]="{'bi-chevron-down': openSubmenus['admin'], 'bi-chevron-right': !openSubmenus['admin']}">
+        </i>
+      </div>
+      <ul class="submenu" *ngIf="openSubmenus['admin'] && isOpen">
+        <li><a (click)="navigateTo('/admin')" [class.active]="activePath === 'admin'">Dashboard</a></li>
+        <!-- <li><a (click)="navigateTo('admin/permission')" [class.active]="activePath === 'admin/permission'">Permisos</a></li> -->
+        
+      </ul>
+    </li>
 
     <!-- Submenús -->
     <li class="nav-item" *appHasRole="['admin']">
