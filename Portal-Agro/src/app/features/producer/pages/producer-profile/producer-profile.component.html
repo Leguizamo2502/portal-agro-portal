@@ -1,4 +1,4 @@
-<div class="container my-3 profile-container">
+<div class="container my-3 profile-container" id="profile">
   <div class="card shadow-lg p-4 rounded-4">
     <!-- HEADER -->
     <div class="row align-items-center text-center text-md-start">
@@ -31,7 +31,7 @@
               matTooltip="Pedidos que llegaron a estado Completado. Un mayor número sugiere cumplimiento y confiabilidad."
               matTooltipPosition="above"
             >
-              <mat-icon class="me-1">verified</mat-icon>
+              <mat-icon id="orders-complete" class="me-1">verified</mat-icon>
               Pedidos completados: {{ compact(saleNumber) }}
             </mat-chip>
 
@@ -41,7 +41,7 @@
               matTooltip="Promedio de calificación de los productos de este productor."
               matTooltipPosition="above"
             >
-              <mat-icon class="me-1">star</mat-icon>
+              <mat-icon id="review" class="me-1">star</mat-icon>
               {{ formatAvg() }} / 5
             </mat-chip>
 
@@ -68,12 +68,12 @@
     <hr />
 
     <!-- Descripción -->
-    <section class="my-4" *ngIf="producer?.description">
+    <section id="description" class="my-4" *ngIf="producer?.description">
       <h5 class="title">Descripción</h5>
       <p class="text-secondary">{{ producer?.description }}</p>
     </section>
 
-    <section class="my-4" *ngIf="producer?.networks?.length">
+    <section class="my-4" id="social" *ngIf="producer?.networks?.length">
       <h5 class="title">Redes sociales</h5>
       <div class="d-flex flex-wrap gap-2">
         <a
@@ -95,13 +95,13 @@
       </div>
     </section>
 
-    <section class="my-4">
+    <section class="my-4" id="farms">
       <h5 class="mb-3 title">Fincas</h5>
       <app-container-card-productor [items]="famrs" [type]="'farm'">
       </app-container-card-productor>
     </section>
 
-    <section class="my-4">
+    <section class="my-4" id="products">
       <h5 class="mb-3 title">Productos</h5>
       <app-container-card-productor [items]="products" [type]="'product'">
       </app-container-card-productor>

@@ -8,7 +8,19 @@
                 <a class="navbar-brand color-title ms-2" routerLink="/home">Portal Agro-comercial del Huila</a>
             </div>
             <div class="btn-tuto">
-                    <button class="tour-btn" (click)="startTour()"><i class="bi bi-info-circle"></i></button>
+                <button
+                    class="tour-btn-tour">
+                    <mat-icon class="tour-help"
+                    #tourButton="matTooltip"
+                    (click)="startTour()"
+                    matTooltip="Haz clic aquí para iniciar el tour guiado"
+                    matTooltipPosition="above"
+                    [matTooltipShowDelay]="0"
+                    [matTooltipHideDelay]="5000"
+                    [matTooltipDisabled]="!showTooltip"
+                    title="Iniciar tour guiado"
+                    >help_outline</mat-icon>
+                </button>
                 </div>
             <!-- Búsqueda centrada -->
             <form class="search-form mx-auto" role="search">
@@ -23,7 +35,7 @@
                 <a class="nav-link custom-text" routerLink="/home">Inicio</a>
                 <a class="nav-link custom-text" routerLink="/home/product">Productos</a>
 
-                <app-button [text]="'Inicia Sersion/Registrate'" *appIfLoggedOut></app-button>
+                <app-button [text]="'Inicia Sesión/Regístrate'" *appIfLoggedOut></app-button>
                 <!-- <a class="nav-link custom-text" routerLink="/home/inicio" *appIfLoggedIn>
                     <mat-icon>notifications</mat-icon>
                 </a> -->
