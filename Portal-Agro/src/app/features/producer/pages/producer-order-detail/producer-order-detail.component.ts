@@ -85,10 +85,10 @@ export class ProducerOrderDetailComponent implements OnInit {
 
     // Aceptado/avance del flujo
     if (
-      s === 'acceptedawaitingpayment' || // nuevo
-      s === 'paymentsubmitted' ||        // nuevo
-      s === 'preparing' ||               // nuevo
-      s === 'dispatched'                 // nuevo
+      s === 'acceptedawaitingpayment' ||
+      s === 'paymentsubmitted' ||
+      s === 'preparing' ||
+      s === 'dispatched'
     ) return 'progress';
 
     if (s === 'completed') return 'completed';
@@ -123,6 +123,13 @@ export class ProducerOrderDetailComponent implements OnInit {
 
     if (!isConfirmed) return;
 
+    Swal.fire({
+      title: 'Procesando...',
+      text: 'Aceptando el pedido.',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
     this.ordersSrv
       .acceptOrder(this.code, {
         notes: notes || undefined,
@@ -131,10 +138,12 @@ export class ProducerOrderDetailComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: async () => {
+          Swal.close();
           await Swal.fire('OK', 'Pedido aceptado.', 'success');
           this.loadDetail(); // refresca para traer nuevo estado/rowVersion
         },
         error: (err) => {
+          Swal.close();
           const msg = err?.error?.message || 'No se pudo aceptar.';
           Swal.fire('Error', msg, 'error');
         },
@@ -162,6 +171,13 @@ export class ProducerOrderDetailComponent implements OnInit {
 
     if (!isConfirmed || !reason) return;
 
+    Swal.fire({
+      title: 'Procesando...',
+      text: 'Rechazando el pedido.',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
     this.ordersSrv
       .rejectOrder(this.code, {
         reason,
@@ -170,10 +186,12 @@ export class ProducerOrderDetailComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: async () => {
+          Swal.close();
           await Swal.fire('OK', 'Pedido rechazado.', 'success');
           this.loadDetail();
         },
         error: (err) => {
+          Swal.close();
           const msg = err?.error?.message || 'No se pudo rechazar.';
           Swal.fire('Error', msg, 'error');
         },
@@ -182,41 +200,72 @@ export class ProducerOrderDetailComponent implements OnInit {
 
   markPreparing(): void {
     if (!this.detail) return;
+
+    Swal.fire({
+      title: 'Actualizando...',
+      text: 'Marcando la orden como en preparación.',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
     this.ordersSrv
       .markPreparing(this.code, this.detail.rowVersion)
       .pipe(take(1))
       .subscribe({
         next: async () => {
+          Swal.close();
           await Swal.fire('OK', 'Orden en preparación.', 'success');
           this.loadDetail();
         },
-        error: (err) =>
-          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error'),
+        error: (err) => {
+          Swal.close();
+          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error');
+        },
       });
   }
 
   markDispatched(): void {
     if (!this.detail) return;
+
+    Swal.fire({
+      title: 'Actualizando...',
+      text: 'Marcando la orden como despachada.',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
     this.ordersSrv
       .markDispatched(this.code, this.detail.rowVersion)
       .pipe(take(1))
       .subscribe({
         next: async () => {
+          Swal.close();
           await Swal.fire('OK', 'Orden despachada.', 'success');
           this.loadDetail();
         },
-        error: (err) =>
-          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error'),
+        error: (err) => {
+          Swal.close();
+          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error');
+        },
       });
   }
 
   markDelivered(): void {
     if (!this.detail) return;
+
+    Swal.fire({
+      title: 'Actualizando...',
+      text: 'Marcando la orden como entregada...',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
     this.ordersSrv
       .markDelivered(this.code, this.detail.rowVersion)
       .pipe(take(1))
       .subscribe({
         next: async () => {
+          Swal.close();
           await Swal.fire(
             'OK',
             'Orden entregada (pendiente de confirmación del cliente).',
@@ -224,8 +273,10 @@ export class ProducerOrderDetailComponent implements OnInit {
           );
           this.loadDetail();
         },
-        error: (err) =>
-          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error'),
+        error: (err) => {
+          Swal.close();
+          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error');
+        },
       });
   }
 }
