@@ -89,3 +89,38 @@
 .lightbox img {
   max-width: 92vw; max-height: 92vh; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,.4);
 }
+.customer-rating {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.customer-rating .title {
+  margin-bottom: 8px;
+}
+
+.customer-rating .stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0;
+}
+
+.customer-rating .star {
+  font-size: 18px;
+  color: #cfd8dc;
+}
+
+.customer-rating .star.filled {
+  color: #fbc02d;
+}
+
+.customer-rating .comment {
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.customer-rating .small {
+  font-size: 12px;
+}
+
