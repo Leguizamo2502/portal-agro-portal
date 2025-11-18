@@ -68,8 +68,39 @@ textarea {
   z-index: 10;
   padding-bottom: 8px;
   background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.product-description .subtitle{
+
+mat-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.star-fav {
+  font-size: 1.3rem;
+  color: #19641d;
+  transition: color 0.2s ease;
+}
+
+.fav-btn:hover {
+  background-color: #189b1f4e;
+}
+
+.fav-btn:hover .star-fav {
+  color: #189b1f;
+}
+
+.fav-btn:active {
+  transform: scale(0.9);
+}
+
+.product-description .subtitle {
   margin: 0;
 }
 .rating-summary{
