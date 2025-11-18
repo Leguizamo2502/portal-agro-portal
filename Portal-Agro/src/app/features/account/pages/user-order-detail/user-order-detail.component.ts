@@ -35,6 +35,13 @@ export class UserOrderDetailComponent implements OnInit {
   readonly MAX_FILE_MB = 6;
   readonly MAX_FILE_BYTES = this.MAX_FILE_MB * 1024 * 1024;
 
+  // estrellas para mostrar la calificación del productor al cliente
+  stars = [1, 2, 3, 4, 5];
+
+  get hasRating(): boolean {
+    return !!this.detail?.consumerRating;
+  }
+
   ngOnInit(): void {
     this.code = String(this.route.snapshot.paramMap.get('code'));
     if (!this.code) {
@@ -75,37 +82,26 @@ export class UserOrderDetailComponent implements OnInit {
     switch (s) {
       case 'PendingReview':
         return { text: 'Pendiente de revisión', cls: 'chip info' };
-
       case 'AcceptedAwaitingPayment':
         return { text: 'Aceptado (esperando pago)', cls: 'chip warning' };
-
       case 'PaymentSubmitted':
         return { text: 'Pago enviado (en revisión)', cls: 'chip info' };
-
       case 'Preparing':
         return { text: 'Preparando', cls: 'chip info' };
-
       case 'Dispatched':
         return { text: 'Despachado', cls: 'chip info' };
-
       case 'DeliveredPendingBuyerConfirm':
         return { text: 'Entregado (pendiente de confirmación)', cls: 'chip warning' };
-
       case 'Completed':
         return { text: 'Completado', cls: 'chip success' };
-
       case 'Rejected':
         return { text: 'Rechazado', cls: 'chip danger' };
-
       case 'Disputed':
         return { text: 'En disputa', cls: 'chip danger' };
-
       case 'Expired':
         return { text: 'Expirado', cls: 'chip danger' };
-
       case 'CancelledByUser':
         return { text: 'Cancelado por el usuario', cls: 'chip danger' };
-
       default:
         return { text: s, cls: 'chip neutral' };
     }

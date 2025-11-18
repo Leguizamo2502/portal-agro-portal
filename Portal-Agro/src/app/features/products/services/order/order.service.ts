@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
 
 import {
@@ -13,6 +13,7 @@ import {
   OrderCreateModel,
   UploadPaymentRequest,
 } from '../../models/order/order.model';
+import { ConsumerRatingCreateModel, ConsumerRatingModel } from '../../models/consumerRating/consumerRating.model';
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {
@@ -102,5 +103,21 @@ export class OrderService {
       JSON.stringify(rowVersion),
       { headers: { 'Content-Type': 'application/json' } }
     );
+  }
+   // ========== CALIFICACIÓN DEL CLIENTE (PRODUCTOR) ==========
+
+  rateCustomer(code: string, dto: ConsumerRatingCreateModel) {
+    return this.http.post<{ isSuccess: boolean; data: ConsumerRatingModel }>(
+      `${this.urlProducer}/${code}/rate-customer`,
+      dto
+    );
+  }
+
+  getCustomerRating(code: string) {
+    return this.http
+      .get<{ isSuccess: boolean; data: ConsumerRatingModel | null }>(
+        `${this.urlProducer}/${code}/rate-customer`
+      )
+      .pipe(map(r => r.data));
   }
 }
