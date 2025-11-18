@@ -1,5 +1,7 @@
 // MODELOS / TIPOS
 
+import { ConsumerRatingModel } from "../consumerRating/consumerRating.model";
+
 export interface OrderCreateModel {
   productId: number;
   quantityRequested: number;
@@ -89,6 +91,10 @@ export interface OrderDetailModel {
 
   // Cliente
   userReceivedAt?: string | null;
+// Calificacion
+  consumerRating?: ConsumerRatingModel | null;
+  customerAverageRating?: number | null;
+  customerRatingsCount: number;
 
   // Metadatos
   createAt: string;          // ISO (ojo con el nombre)

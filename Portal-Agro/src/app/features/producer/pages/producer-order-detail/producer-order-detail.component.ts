@@ -2,15 +2,18 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
 import Swal from 'sweetalert2';
-import { OrderDetailModel } from '../../../products/models/order/order.model';
+
 import { OrderService } from '../../../products/services/order/order.service';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { StatusTranslatePipe } from '../../../../shared/pipes/StatusTranslatePipe/status-translate-pipe.pipe';
+import { FormsModule } from '@angular/forms';
+import { ConsumerRatingCreateModel } from '../../../products/models/consumerRating/consumerRating.model';
+import { OrderDetailModel } from '../../../products/models/order/order.model';
 
 @Component({
   selector: 'app-producer-order-detail',
-  imports: [CommonModule, ButtonComponent, StatusTranslatePipe],
+  imports: [CommonModule, ButtonComponent, StatusTranslatePipe, FormsModule],
   templateUrl: './producer-order-detail.component.html',
   styleUrl: './producer-order-detail.component.css',
 })
@@ -22,6 +25,12 @@ export class ProducerOrderDetailComponent implements OnInit {
   code!: string;
   detail?: OrderDetailModel;
   loading = true;
+
+  // ======= Rating del cliente =======
+  stars = [1, 2, 3, 4, 5];
+  rating = 0;
+  comment = '';
+  savingRating = false;
 
   ngOnInit(): void {
     this.code = String(this.route.snapshot.paramMap.get('code'));
@@ -40,6 +49,16 @@ export class ProducerOrderDetailComponent implements OnInit {
       .subscribe({
         next: (d) => {
           this.detail = d;
+
+          // Si ya hay calificación, inicializa rating y comentario
+          if (d.consumerRating) {
+            this.rating = d.consumerRating.rating;
+            this.comment = d.consumerRating.comment ?? '';
+          } else {
+            this.rating = 0;
+            this.comment = '';
+          }
+
           this.loading = false;
         },
         error: (err) => {
@@ -67,6 +86,83 @@ export class ProducerOrderDetailComponent implements OnInit {
     return this.detail?.status === 'Dispatched';
   }
 
+  // ======= Rating: helpers =======
+  get isAlreadyRated(): boolean {
+    return !!this.detail?.consumerRating;
+  }
+
+  setRating(value: number): void {
+    if (this.savingRating) return;
+    this.rating = value;
+  }
+
+  onRateCustomer(): void {
+    if (!this.detail) return;
+
+    if (this.detail.status !== 'Completed') {
+      Swal.fire(
+        'No permitido',
+        'Solo puedes calificar cuando la orden está completada.',
+        'info'
+      );
+      return;
+    }
+
+    if (this.rating < 1 || this.rating > 5) {
+      Swal.fire(
+        'Calificación inválida',
+        'Selecciona una calificación entre 1 y 5.',
+        'warning'
+      );
+      return;
+    }
+
+    const body: ConsumerRatingCreateModel = {
+      rating: this.rating,
+      comment: this.comment?.trim() || null,
+      rowVersion: this.detail.rowVersion,
+    };
+
+    this.savingRating = true;
+
+    Swal.fire({
+      title: 'Guardando...',
+      text: 'Registrando la calificación del cliente.',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
+    this.ordersSrv
+      .rateCustomer(this.code, body)
+      .pipe(take(1))
+      .subscribe({
+        next: (res) => {
+          this.savingRating = false;
+          Swal.close();
+
+          // Actualiza la calificación en el detalle con lo que devuelve el backend
+          if (this.detail) {
+            this.detail.consumerRating = res.data;
+          }
+
+          Swal.fire(
+            'Calificación registrada',
+            'La calificación del cliente se guardó correctamente.',
+            'success'
+          );
+        },
+        error: (err) => {
+          this.savingRating = false;
+          Swal.close();
+          Swal.fire(
+            'Error',
+            err?.error?.message ?? 'No se pudo registrar la calificación.',
+            'error'
+          );
+        },
+      });
+  }
+
   // ======= Chip de estado (clases CSS) =======
   chipClass(
     status: string
@@ -79,11 +175,9 @@ export class ProducerOrderDetailComponent implements OnInit {
     | 'disputed' {
     const s = (status || '').toLowerCase();
 
-    // Pendiente de decisión o de confirmación del comprador
     if (s === 'pendingreview' || s === 'deliveredpendingbuyerconfirm')
       return 'pending';
 
-    // Aceptado/avance del flujo
     if (
       s === 'acceptedawaitingpayment' ||
       s === 'paymentsubmitted' ||
@@ -96,7 +190,6 @@ export class ProducerOrderDetailComponent implements OnInit {
       return 'rejected';
     if (s === 'disputed') return 'disputed';
 
-    // fallback
     return 'accepted';
   }
 
@@ -140,7 +233,7 @@ export class ProducerOrderDetailComponent implements OnInit {
         next: async () => {
           Swal.close();
           await Swal.fire('OK', 'Pedido aceptado.', 'success');
-          this.loadDetail(); // refresca para traer nuevo estado/rowVersion
+          this.loadDetail();
         },
         error: (err) => {
           Swal.close();
@@ -219,7 +312,11 @@ export class ProducerOrderDetailComponent implements OnInit {
         },
         error: (err) => {
           Swal.close();
-          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error');
+          Swal.fire(
+            'Error',
+            err?.error?.message ?? 'No se pudo marcar.',
+            'error'
+          );
         },
       });
   }
@@ -245,7 +342,11 @@ export class ProducerOrderDetailComponent implements OnInit {
         },
         error: (err) => {
           Swal.close();
-          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error');
+          Swal.fire(
+            'Error',
+            err?.error?.message ?? 'No se pudo marcar.',
+            'error'
+          );
         },
       });
   }
@@ -275,7 +376,11 @@ export class ProducerOrderDetailComponent implements OnInit {
         },
         error: (err) => {
           Swal.close();
-          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error');
+          Swal.fire(
+            'Error',
+            err?.error?.message ?? 'No se pudo marcar.',
+            'error'
+          );
         },
       });
   }
