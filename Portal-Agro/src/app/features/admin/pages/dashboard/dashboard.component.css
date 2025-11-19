@@ -127,18 +127,60 @@
   border-radius: 999px;
 }
 
-/* Payments */
+/* Payments Colors */
+.pending { background-color: #9e9e9e6f; }
+.awaiting { background-color: #1976d277; }
+.review { background-color: #ff990081; }
+.delivery { background-color: #7b1fa276; }
+.completed { background-color: #388e3c85; }
+
 
 .payments-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 0.5rem;
 }
+/* ... tus estilos anteriores ... */
 
+/* Estilos para la nueva leyenda personalizada */
+.custom-legend {
+  margin-top: 1rem; /* Separación del gráfico */
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0; /* Una línea sutil para separar */
+  
+  display: flex;
+  flex-wrap: wrap; /* Permite que bajen si no caben */
+  gap: 1rem; /* Espacio entre items */
+  justify-content: center; /* Centrados horizontalmente */
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #555;
+  background-color: #f9fafb; /* Fondo muy sutil para cada item */
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%; /* Círculo perfecto */
+  display: inline-block;
+  flex-shrink: 0; /* Evita que el círculo se aplaste */
+}
+
+.legend-text {
+  font-weight: 500;
+}
 .payment-card {
+  height:70px;
+  width: 210px;
   padding: 0.75rem;
   border-radius: 0.6rem;
-  background: #fafafa;
   font-size: 0.9rem;
 }
 
@@ -152,46 +194,99 @@
   font-weight: 600;
 }
 
-/* Rankings */
-
-.rankings-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 1rem;
+.ranking-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding:12px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.ranking-panel h3 {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
+.table-responsive {
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #9e9e9e;
+  font-style: italic;
+  background: #f9fafb;
+  border-radius: 8px;
 }
 
 .ranking-table {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
-}
-
-.ranking-table th,
-.ranking-table td {
-  padding: 0.4rem 0.5rem;
-  border-bottom: 1px solid #eeeeee;
-  text-align: left;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
 }
 
 .ranking-table th {
-  background: #fafafa;
-  font-weight: 600;
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  z-index: 10;
+  padding: 1rem 0.75rem;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #909090;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #f0f0f0;
 }
 
-.top-selector {
-  display: flex;
+.ranking-table td {
+  padding: 0.85rem 0.75rem;
+  border-bottom: 1px solid #f5f5f5;
+  vertical-align: middle;
+  color: #424242;
+  transition: background 0.2s;
+}
+
+.ranking-table tbody tr:hover td {
+  background-color: #fcfcfc;
+}
+
+.text-right { text-align: right; }
+.text-muted { color: #757575; font-size: 0.85rem; }
+.fw-bold { font-weight: 700; }
+.fw-500 { font-weight: 500; }
+.text-primary { color: #2e7d32; }
+.w-rank { width: 50px; text-align: center; }
+
+.rank-badge {
+  display: inline-flex;
+  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #555;
+  background-color: #f5f5f5;
 }
 
-.top-selector select {
-  padding: 0.2rem 0.4rem;
-  font-size: 0.85rem;
+.rank-badge.rank-1 {
+  background-color: #fff8e1;
+  color: #ffb300;
+  box-shadow: 0 0 0 1px #ffe082;
+}
+
+.rank-badge.rank-2 {
+  background-color: #fafafa;
+  color: #757575;
+  box-shadow: 0 0 0 1px #bdbdbd;
+}
+
+.rank-badge.rank-3 {
+  background-color: #fbe9e7;
+  color: #d84315;
+  box-shadow: 0 0 0 1px #ffab91;
 }
 
 @media (max-width: 900px) {
@@ -200,31 +295,42 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.rankings-grid{
+  display:flex;
+  flex-direction: column;
+  gap: 3rem;
+}
 .chart-container {
   position: relative;
   width: 100%;
-  height: 260px;
+  height: 300px;
 }
 
 .payments-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
-  gap: 0.75rem;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .payments-chart {
-  min-height: 220px;
+  height: 300px;
+  width: 100%;
+  position: relative;
 }
 
 .payments-list {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.4rem;
 }
 
 @media (max-width: 900px) {
   .payments-layout {
-    grid-template-columns: minmax(0, 1fr);
+    display: block;
+  }
+  
+  .payments-chart {
+    height: 300px;
   }
 }

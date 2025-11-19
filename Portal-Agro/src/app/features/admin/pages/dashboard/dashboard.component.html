@@ -69,6 +69,12 @@
             >
             </canvas>
           </div>
+          <div class="custom-legend">
+            <div class="legend-item" *ngFor="let item of funnelLegend">
+              <span class="legend-dot" [style.background-color]="item.color"></span>
+              <span class="legend-text">{{ item.label }}</span>
+            </div>
+          </div>
         </ng-container>
 
         <ng-template #noFunnel>
@@ -85,7 +91,7 @@
         <div class="payments-layout">
           <div class="payments-chart">
             <div class="chart-container">
-              <canvas
+              <canvas 
                 baseChart
                 [type]="'doughnut'"
                 [data]="paymentDoughnutData"
@@ -123,84 +129,100 @@
 
     <!-- ================= Rankings ================= -->
     <section class="panel">
-      <div class="panel-header">
-        <h2>Rankings</h2>
-        <div class="top-selector">
-          <label for="topLimit">Mostrar top:</label>
-          <select
-            id="topLimit"
-            [(ngModel)]="topLimit"
-            (ngModelChange)="onChangeTopLimit($event)"
-          >
-            <option [ngValue]="5">Top 5</option>
-            <option [ngValue]="10">Top 10</option>
-            <option [ngValue]="15">Top 15</option>
-            <option [ngValue]="20">Top 20</option>
-          </select>
-        </div>
+  <div class="panel-header">
+    <h2>Rankings</h2>
+    <div class="top-selector">
+      <label for="topLimit">Mostrar:</label>
+      <select
+        id="topLimit"
+        [(ngModel)]="topLimit"
+        (ngModelChange)="onChangeTopLimit($event)"
+      >
+        <option [ngValue]="5">Top 5</option>
+        <option [ngValue]="10">Top 10</option>
+        <option [ngValue]="15">Top 15</option>
+        <option [ngValue]="20">Top 20</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="rankings-grid">
+    
+    <div class="ranking-panel">
+      <h3>Top productores por ingresos</h3>
+      
+      <div class="table-responsive">
+        <table class="ranking-table" *ngIf="d.topProducers?.length; else noProducers">
+          <thead>
+            <tr>
+              <th class="w-rank">#</th>
+              <th>Productor</th>
+              <th class="text-right">Pedidos</th>
+              <th class="text-right">Ingresos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of d.topProducers; let i = index; trackBy: trackByProducer">
+              <td>
+                <span class="rank-badge" [ngClass]="'rank-' + (i + 1)">
+                  {{ i + 1 }}
+                </span>
+              </td>
+              <td class="fw-500">{{ p.producerName }}</td>
+              <td class="text-right text-muted">{{ p.completedOrders }}</td>
+              <td class="text-right fw-bold text-primary">
+                {{ formatCurrency(p.totalRevenue) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <div class="rankings-grid">
-        <!-- Top productores -->
-        <div class="ranking-panel">
-          <h3>Top productores por ingresos</h3>
-
-          <table class="ranking-table" *ngIf="d.topProducers?.length; else noProducers">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Productor</th>
-                <th>Pedidos completados</th>
-                <th>Ingresos</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="let p of d.topProducers; let i = index; trackBy: trackByProducer"
-              >
-                <td>{{ i + 1 }}</td>
-                <td>{{ p.producerName }}</td>
-                <td>{{ p.completedOrders }}</td>
-                <td>{{ formatCurrency(p.totalRevenue) }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <ng-template #noProducers>
-            <p>No hay datos suficientes de productores.</p>
-          </ng-template>
+      <ng-template #noProducers>
+        <div class="empty-state">
+          <p>No hay datos de productores aún.</p>
         </div>
+      </ng-template>
+    </div>
 
-        <!-- Top productos -->
-        <div class="ranking-panel">
-          <h3>Top productos por ventas</h3>
+    <div class="ranking-panel">
+      <h3>Top productos por ventas</h3>
 
-          <table class="ranking-table" *ngIf="d.topProducts?.length; else noProducts">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Producto</th>
-                <th>Pedidos completados</th>
-                <th>Unidades</th>
-                <th>Ingresos</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="let pr of d.topProducts; let i = index; trackBy: trackByProduct"
-              >
-                <td>{{ i + 1 }}</td>
-                <td>{{ pr.productName }}</td>
-                <td>{{ pr.completedOrders }}</td>
-                <td>{{ pr.totalUnits }}</td>
-                <td>{{ formatCurrency(pr.totalRevenue) }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <ng-template #noProducts>
-            <p>No hay datos suficientes de productos.</p>
-          </ng-template>
-        </div>
+      <div class="table-responsive">
+        <table class="ranking-table" *ngIf="d.topProducts?.length; else noProducts">
+          <thead>
+            <tr>
+              <th class="w-rank">#</th>
+              <th>Producto</th>
+              <th class="text-right">Pedidos</th>
+              <th class="text-right">Unds.</th>
+              <th class="text-right">Ingresos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pr of d.topProducts; let i = index; trackBy: trackByProduct">
+              <td>
+                <span class="rank-badge" [ngClass]="'rank-' + (i + 1)">
+                  {{ i + 1 }}
+                </span>
+              </td>
+              <td class="fw-500">{{ pr.productName }}</td>
+              <td class="text-right text-muted">{{ pr.completedOrders }}</td>
+              <td class="text-right text-muted">{{ pr.totalUnits }}</td>
+              <td class="text-right fw-bold text-primary">
+                {{ formatCurrency(pr.totalRevenue) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </section>
-  </ng-container>
-</div>
+
+      <ng-template #noProducts>
+        <div class="empty-state">
+          <p>No hay datos de productos aún.</p>
+        </div>
+      </ng-template>
+    </div>
+
+  </div>
+</section>
