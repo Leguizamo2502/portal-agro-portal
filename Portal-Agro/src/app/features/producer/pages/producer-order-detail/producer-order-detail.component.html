@@ -10,11 +10,13 @@
     <!-- Columna izquierda: info -->
     <section class="card">
       <h3 class="title">Resumen</h3>
+
       <div class="row">
         <div class="productoS- d-flex gap-1">
           <div class="subtitle">Producto:</div>
           <div class="text">{{ detail!.productName }}</div>
         </div>
+
         <div class="d-flex gap-1">
           <div class="subtitle">Cantidad:</div>
           <div class="text">
@@ -27,13 +29,14 @@
         <div class="precioUni-co d-flex gap-1">
           <div class="subtitle">Precio unitario:</div>
           <div class="text">
-            {{ detail!.unitPrice | currency : 'COP' }}
+            {{ detail!.unitPrice | currency: 'COP' }}
           </div>
         </div>
+
         <div class="subtotal-cop d-flex gap-1">
           <div class="subtitle">Subtotal:</div>
           <div class="text">
-            {{ detail!.subtotal | currency : 'COP' }}
+            {{ detail!.subtotal | currency: 'COP' }}
           </div>
         </div>
       </div>
@@ -42,7 +45,7 @@
         <div class="d-flex gap-1">
           <div class="subtitle">Total:</div>
           <div class="text">
-            {{ detail!.total | currency : 'COP' }}
+            {{ detail!.total | currency: 'COP' }}
           </div>
         </div>
       </div>
@@ -53,6 +56,7 @@
           <div class="subtitle">Destinatario:</div>
           <div class="text">{{ detail!.recipientName }}</div>
         </div>
+
         <div class="d-flex gap-1">
           <div class="subtitle">Teléfono:</div>
           <div class="text">{{ detail!.contactPhone }}</div>
@@ -79,19 +83,21 @@
         <div class="d-flex gap-1">
           <div class="subtitle">Creado:</div>
           <div class="text">
-            {{ detail!.createAt | date : 'mediumDate' : '' : 'es-CO' }}
+            {{ detail!.createAt | date: 'mediumDate':'':'es-CO' }}
           </div>
         </div>
+
         <div *ngIf="detail!.producerDecisionAt">
           <strong>Decisión productor:</strong>
-          {{ detail!.producerDecisionAt | date : 'mediumDate' : '' : 'es-CO' }}
+          {{ detail!.producerDecisionAt | date: 'mediumDate':'':'es-CO' }}
         </div>
       </div>
     </section>
 
-    <!-- Columna derecha: acciones / comprobante / rating -->
+    <!-- Columna derecha: acciones / comprobante -->
     <section class="card actions">
       <h3 class="title">Comprobante</h3>
+
       <div class="receipt" *ngIf="detail!.paymentImageUrl; else noReceipt">
         <img
           [src]="detail!.paymentImageUrl!"
@@ -100,6 +106,7 @@
         />
         <small class="muted">Clic para abrir en nueva pestaña</small>
       </div>
+
       <ng-template #noReceipt>
         <p class="muted">
           Sin comprobante
@@ -118,13 +125,19 @@
               color="danger"
               (clicked)="reject()"
             ></app-button>
+
             <app-button
               text="Aceptar"
               color="primary"
               (clicked)="accept()"
             ></app-button>
           </div>
-          <app-button text="Volver" color="secondary" [back]="true"></app-button>
+
+          <app-button
+            text="Volver"
+            color="secondary"
+            [back]="true"
+          ></app-button>
         </div>
       </div>
 
@@ -163,85 +176,6 @@
       >
         No hay acciones disponibles para el estado actual.
       </div>
-
-      <!-- ================= CALIFICACIÓN DEL CLIENTE ================= -->
-      <section class="customer-rating" *ngIf="detail">
-        <h3 class="title">Calificación del cliente</h3>
-
-        <!-- Resumen histórico del cliente -->
-        <p *ngIf="detail.customerRatingsCount > 0" class="muted">
-          Promedio histórico del cliente:
-          <strong>{{
-            detail.customerAverageRating | number : '1.1-2'
-          }}/5</strong>
-          ({{ detail.customerRatingsCount }} calificaciones)
-        </p>
-
-        <!-- Ya calificado -->
-        <div *ngIf="isAlreadyRated; else ratingForm">
-          <div class="stars">
-            <span
-              *ngFor="let s of stars"
-              class="star"
-              [class.filled]="detail!.consumerRating!.rating >= s"
-            >
-              ★
-            </span>
-            <span class="muted">
-              ({{ detail!.consumerRating!.rating }}/5)
-            </span>
-          </div>
-
-          <p *ngIf="detail!.consumerRating!.comment" class="comment">
-            "{{ detail!.consumerRating!.comment }}"
-          </p>
-        </div>
-
-        <!-- Formulario para calificar -->
-        <ng-template #ratingForm>
-          <p *ngIf="detail!.status !== 'Completed'" class="muted">
-            Solo puedes calificar cuando la orden esté completada.
-          </p>
-
-          <div *ngIf="detail!.status === 'Completed'" class="rating-form">
-            <div class="stars editable">
-              <button
-                type="button"
-                *ngFor="let s of stars"
-                class="star-btn"
-                [class.active]="rating >= s"
-                [disabled]="savingRating"
-                (click)="setRating(s)"
-              >
-                ★
-              </button>
-              <span class="muted" *ngIf="rating">({{ rating }}/5)</span>
-            </div>
-
-            <textarea
-              [(ngModel)]="comment"
-              [disabled]="savingRating"
-              rows="3"
-              maxlength="500"
-              placeholder="Comentario opcional sobre el cliente..."
-            ></textarea>
-            <div class="char-counter">
-              {{ comment.length || 0 }}/500
-            </div>
-
-            <app-button
-              type="button"
-              [text]="'Guardar calificación'"
-              [color]="'primary'"
-              (clicked)="onRateCustomer()"
-              [disabled]="savingRating || rating === 0"
-            >
-              
-            </app-button>
-          </div>
-        </ng-template>
-      </section>
-      <!-- ================= FIN CALIFICACIÓN DEL CLIENTE ================= -->
     </section>
   </div>
 </div>
@@ -249,3 +183,32 @@
 <ng-template #loadingTpl>
   <p class="muted">Cargando detalle…</p>
 </ng-template>
+
+<!-- Botón flotante de chat -->
+<button
+  type="button"
+  class="order-chat-fab"
+  *ngIf="detail"
+  (click)="toggleChat()"
+>
+  <mat-icon>chat</mat-icon>
+</button>
+
+<!-- Panel flotante con el chat -->
+<div class="order-chat-overlay" *ngIf="showChat && detail">
+  <div class="order-chat-panel">
+    <div class="order-chat-panel-header">
+      <span>Chat con el cliente (Pedido #{{ detail!.id }})</span>
+      <button
+        type="button"
+        class="order-chat-close"
+        (click)="toggleChat()"
+        aria-label="Cerrar chat"
+      >
+        ×
+      </button>
+    </div>
+
+    <app-order-chat [orderCode]="code"></app-order-chat>
+  </div>
+</div>
