@@ -124,3 +124,79 @@
   font-size: 12px;
 }
 
+.order-chat-fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background-color: #28a745;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.order-chat-fab:hover {
+  background-color: #218838;
+}
+
+.order-chat-fab mat-icon {
+  font-size: 24px;
+}
+
+/* Fondo semitransparente detrás del chat */
+.order-chat-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  z-index: 1000;
+}
+
+/* Panel del chat */
+.order-chat-panel {
+  width: 360px;
+  max-width: 90vw;
+  max-height: 70vh;
+  margin: 16px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.order-chat-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e0e0e0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  background-color: #fafafa;
+}
+
+.order-chat-close {
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.order-chat-panel app-order-chat {
+  display: block;
+  height: 100%;
+}
+
+

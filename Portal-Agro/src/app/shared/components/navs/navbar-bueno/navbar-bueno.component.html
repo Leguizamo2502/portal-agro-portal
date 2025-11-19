@@ -35,7 +35,7 @@
                 <a class="nav-link custom-text" routerLink="/home">Inicio</a>
                 <a class="nav-link custom-text" routerLink="/home/product">Productos</a>
 
-                <app-button [text]="'Inicia Sesión/Regístrate'" *appIfLoggedOut></app-button>
+                <app-button [text]="'Inicia Sesión/Regístrate'" *appIfLoggedOut [redirectTo]="'/auth/login'"></app-button>
                 <!-- <a class="nav-link custom-text" routerLink="/home/inicio" *appIfLoggedIn>
                     <mat-icon>notifications</mat-icon>
                 </a> -->
