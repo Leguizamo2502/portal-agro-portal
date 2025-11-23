@@ -5,7 +5,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Component, inject, OnInit } from '@angular/core';
-import { RegisterUserModel } from '../../../../Core/Models/registeruser.model';
+import { ConfirmEmailVerificationModel, RegisterUserModel, RequestEmailVerificationModel } from '../../../../Core/Models/registeruser.model';
 import Swal from 'sweetalert2';
 import { Router, RouterLink } from '@angular/router';
 import { LocationService } from '../../../../shared/services/location/location.service';
@@ -51,11 +51,13 @@ export class RegisterComponent implements OnInit {
   private _router = inject(Router);
   private _location = inject(LocationService);
 
-  // ✅ Inyecta el servicio de password policy
+  // Inyecta el servicio de password policy
   private pass = inject(PasswordPolicyService);
 
   departments: DepartmentModel[] = [];
   cities: CityModel[] = [];
+
+  verificationEmail = '';
 
   // Paso 1: Credenciales (usa la política en el control y el match a nivel de grupo)
   public credentialsForm: FormGroup = this.fb.group(
@@ -89,6 +91,12 @@ export class RegisterComponent implements OnInit {
   currentStep = 1;
   isLinear = true;
   loading = false;
+  resending = false;
+
+  public verificationForm: FormGroup = this.fb.group({
+    email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
+    code: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
+  });
 
   ngOnInit(): void {
     this.loadDeparment();
@@ -133,6 +141,7 @@ export class RegisterComponent implements OnInit {
     const field = formGroup.get(fieldName);
     if (field?.hasError('required')) return 'Este campo es requerido';
     if (field?.hasError('email')) return 'Email no válido';
+    if (fieldName === 'code' && field?.hasError('pattern')) return 'El código debe tener 6 dígitos';
     if (field?.hasError('pattern')) return 'Solo números permitidos';
     if (field?.hasError('passwordPolicy')) return 'Mínimo 6 caracteres y al menos 1 mayúscula';
     if (formGroup.hasError('passwordMismatch')) return 'Las contraseñas no coinciden';
@@ -181,11 +190,7 @@ export class RegisterComponent implements OnInit {
       )
       .subscribe((data: any) => {
         if (data?.isSuccess) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Usuario creado',
-            text: 'El registro se completó correctamente.',
-          }).then(() => this._router.navigate(['/auth/login']));
+          this.startEmailVerification(objeto.email);
         } else {
           if (!Swal.isVisible() || Swal.isLoading()) {
             Swal.fire({ icon: 'error', title: 'Oops...', text: 'Error al crear el usuario.' });
@@ -193,4 +198,76 @@ export class RegisterComponent implements OnInit {
         }
       });
   }
+
+  private startEmailVerification(email: string): void {
+    this.verificationEmail = email;
+    this.verificationForm.reset({ email });
+    this.verificationForm.get('email')?.disable({ emitEvent: false });
+    this.currentStep = 4;
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Usuario creado',
+      text: 'Hemos enviado un código de verificación a tu correo. Ingrésalo para activar tu cuenta.',
+    });
+  }
+
+  resendCode(): void {
+    if (!this.verificationEmail || this.resending) return;
+
+    const payload: RequestEmailVerificationModel = { email: this.verificationEmail };
+    this.resending = true;
+
+    this._servicio
+      .RequestEmailVerification(payload)
+      .pipe(
+        take(1),
+        catchError((err) => {
+          const msg = err?.error?.message || err?.message || 'No se pudo reenviar el código.';
+          Swal.fire({ icon: 'error', title: 'Error', text: msg });
+          return of({ isSuccess: false });
+        }),
+        finalize(() => (this.resending = false))
+      )
+      .subscribe((resp: any) => {
+        if (resp?.isSuccess !== false) {
+          Swal.fire({ icon: 'success', title: 'Código reenviado', text: 'Revisa tu correo electrónico.' });
+        }
+      });
+  }
+
+  confirmVerification(): void {
+    this.verificationForm.markAllAsTouched();
+    if (this.verificationForm.invalid) return;
+
+    const { email, code } = this.verificationForm.getRawValue() as ConfirmEmailVerificationModel;
+
+    Swal.fire({
+      title: 'Verificando correo...',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
+    this._servicio
+      .ConfirmEmailVerification({ email, code })
+      .pipe(
+        take(1),
+        catchError((err) => {
+          const msg = err?.error?.message || err?.message || 'No se pudo verificar el correo.';
+          Swal.fire({ icon: 'error', title: 'Error', text: msg });
+          return of({ isSuccess: false });
+        }),
+        finalize(() => Swal.close())
+      )
+      .subscribe((resp: any) => {
+        if (resp?.isSuccess !== false) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Correo verificado',
+            text: 'Tu cuenta está activa, ahora puedes iniciar sesión.',
+          }).then(() => this._router.navigate(['/auth/login']));
+        }
+      });
+  }
+
 }
