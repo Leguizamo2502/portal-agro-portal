@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { ButtonComponent } from "../../../../shared/components/button/button.component";
 import { MatIconModule } from "@angular/material/icon";
 import { MatStep, MatStepperModule } from "@angular/material/stepper";
+import { AuthService } from '../../../../Core/services/auth/auth.service';
 
 export interface OrderCreateDialogData {
   productId: number;
@@ -79,6 +80,7 @@ export class OrderCreateDialogComponent {
   private dialogRef = inject(MatDialogRef<OrderCreateDialogComponent>);
   private locationSrv = inject(LocationService);
   private orderSrv = inject(OrderService);
+  private authSrv = inject(AuthService);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: OrderCreateDialogData) {}
 
@@ -96,6 +98,7 @@ export class OrderCreateDialogComponent {
   ngOnInit(): void {
     this.initForms();
     this.loadDepartments();
+    this.prefillForm();
   }
 
   // ---------- Init Forms ----------
@@ -140,14 +143,47 @@ export class OrderCreateDialogComponent {
     });
   }
 
-  onDepartmentChange(depId: number): void {
+  onDepartmentChange(depId: number, cityId?: number): void {
     this.deliveryGroup.patchValue({ cityId: null });
     this.cities = [];
     if (!depId) return;
 
     this.locationSrv.getCity(depId).pipe(take(1)).subscribe({
-      next: (cities) => (this.cities = cities ?? []),
+      next: (cities) => {
+        this.cities = cities ?? [];
+        if (cityId) {
+          const exists = this.cities.some((c) => c.id === cityId);
+          if (exists) {
+            this.deliveryGroup.patchValue({ cityId });
+          }
+        }
+      },
     });
+  }
+
+  private prefillForm(): void {
+    this.authSrv
+      .GetDataBasic()
+      .pipe(take(1))
+      .subscribe({
+        next: (data) => {
+          const fullName = `${data.firstName ?? ''} ${data.lastName ?? ''}`.trim();
+
+          this.deliveryGroup.patchValue({
+            recipientName: fullName || undefined,
+            contactPhone: data.phoneNumber ?? undefined,
+            addressLine1: data.address ?? undefined,
+            departmentId: data.departmentId ?? null,
+          });
+
+          if (data.departmentId) {
+            this.onDepartmentChange(data.departmentId, data.cityId ?? undefined);
+          }
+        },
+        error: () => {
+          // Silenciar errores de precarga para no bloquear la creación de pedido
+        },
+      });
   }
 
   // ---------- Helpers UI ----------
