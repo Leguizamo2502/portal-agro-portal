@@ -8,3 +8,12 @@ export interface RegisterUserModel {
     address:        string;
     cityId:         number;
 }
+
+export interface RequestEmailVerificationModel {
+  email: string;
+}
+
+export interface ConfirmEmailVerificationModel {
+  email: string;
+  code: string;
+}
