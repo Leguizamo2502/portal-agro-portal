@@ -1,6 +1,7 @@
 import {
   FormBuilder,
   FormGroup,
+  MaxLengthValidator,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -82,7 +83,7 @@ export class RegisterComponent implements OnInit {
 
   // Paso 3: Contacto y ubicación
   public contactForm: FormGroup = this.fb.group({
-    phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+    phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     address: ['', Validators.required],
     departmentId: ['', Validators.required],
     cityId: ['', Validators.required],
@@ -145,6 +146,8 @@ export class RegisterComponent implements OnInit {
     if (field?.hasError('pattern')) return 'Solo números permitidos';
     if (field?.hasError('passwordPolicy')) return 'Mínimo 6 caracteres y al menos 1 mayúscula';
     if (formGroup.hasError('passwordMismatch')) return 'Las contraseñas no coinciden';
+    if (fieldName === 'phoneNumber' && field?.hasError('pattern')) return 'El teléfono debe tener 10 dígitos numéricos';
+
     return '';
   }
 
