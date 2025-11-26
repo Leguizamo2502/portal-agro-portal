@@ -1,62 +1,76 @@
-.us{
-    width: 250px;
-}
-.us .subtitle{
-    color: #e0e0e0;
-}
-.location-footer .subtitle{
-    margin: 0;
-    color: #e0e0e0;
-}
-.location-footer .text{
-    margin: 0;
-    color: #e0e0e0;
-}
-.email-footer .subtitle{
-    margin: 0;
-    color: #e0e0e0;
-}
-.email-footer .text{
-    margin: 0;
-    color: #e0e0e0;
-    word-wrap: break-word;
-}
-.banner-h{
-    height: 16vh;
-    width: auto;
-}
-.footer-container {
-    width: 100%;
-    background: #2e7d32;
-    color: #fff;
-    overflow-y: hidden;
-    max-height:max-content;
+.footer {
+  background-color: #287d2d;
+  color: #ffffff;
+  padding: 24px 32px 16px;
+  font-size: 14px;
 }
 
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
+  flex-wrap: wrap;
 }
 
-.banner-h {
-    max-width: 150px;
-    height: auto;
+.footer-left {
+  max-width: 480px;
 }
 
-@media (max-width: 576px) {
-    .footer-container {
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-        padding-bottom:3rem ;
-    }
+.footer-title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+}
 
-    .footer-content .row > div {
-        margin-bottom: 1rem;
-    }
+.footer-text {
+  margin: 0 0 8px;
+}
 
-    .banner-h {
-        max-width: 120px;
-    }
+.footer-meta {
+  margin: 2px 0;
+}
+
+.footer-right {
+  min-width: 220px;
+  text-align: right;
+}
+
+.footer-call {
+  margin: 0 0 8px;
+  font-weight: 500;
+}
+
+.download-app-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  background: transparent;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.download-app-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.footer-bottom {
+  margin-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  padding-top: 8px;
+  text-align: center;
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 16px 16px 12px;
+  }
+
+  .footer-right {
+    text-align: left;
+  }
 }
