@@ -120,16 +120,16 @@ mat-icon {
 
 .star-fav {
   font-size: 1.3rem;
-  color: #e53935;
+  color: #19641d;
   transition: color 0.2s ease;
 }
 
 .fav-btn:hover {
-  background-color: rgba(229, 57, 53, 0.15);
+  background-color: #189b1f4e;
 }
 
 .fav-btn:hover .star-fav {
-  color: #d32f2f;
+  color: #189b1f;
 }
 
 .fav-btn:active {

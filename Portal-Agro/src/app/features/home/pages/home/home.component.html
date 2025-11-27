@@ -6,12 +6,13 @@
   [showHeader]="true"
   [loading]="loadingProducts"
   [skeletonCount]="6"
-  [products]="products">
+  [products]="products"
+>
 </app-container-card>
 
-  <div class="banner-farming">
-    <app-farming-banner></app-farming-banner>
-  </div>
+<div class="banner-farming">
+  <app-farming-banner></app-farming-banner>
+</div>
 
 <app-container-card
   id="featured-products"
@@ -19,13 +20,16 @@
   [showHeader]="true"
   [loading]="loadingFeatured"
   [skeletonCount]="6"
-  [products]="productFeatured">
+  [products]="productFeatured"
+>
 </app-container-card>
 
-<app-button class="d-flex justify-content-center mt-3"
+<app-button
+  class="d-flex justify-content-center mt-3"
   id="explorarBtn"
   [text]="'Explorar Productos'"
   [type]="'button'"
-  [redirectTo]="'/home/product'">
+  [redirectTo]="'/home/product'"
+>
 </app-button>
 
