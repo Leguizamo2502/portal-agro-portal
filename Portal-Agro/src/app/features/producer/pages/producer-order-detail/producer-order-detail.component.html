@@ -117,32 +117,37 @@
       </ng-template>
 
       <!-- Acciones por estado -->
-      <div class="btns" *ngIf="canAcceptReject">
-        <div class="btns-last-Bottom">
-          <div class="d-flex gap-2">
-            <app-button
-              id="drv-btn-reject"
-              text="Rechazar"
-              color="danger"
-              (clicked)="reject()"
-            ></app-button>
+      <div class="mt-auto" *ngIf="canAcceptReject">
+        <div class="g-2 mt-4 justify-content-center d-flex actions-buttons">
 
+          <div class="g-col-6 g-col-md-4 mx-2">
             <app-button
-              id="drv-btn-accept"
               text="Aceptar"
               color="primary"
               (clicked)="accept()"
             ></app-button>
           </div>
 
-          <app-button
-            id="drv-btn-back"
-            text="Volver"
-            color="secondary"
-            [back]="true"
-          ></app-button>
+          <div class="g-col-6 g-col-md-4 mx-2">
+            <app-button
+              id="drv-btn-reject"
+              text="Rechazar"
+              color="danger"
+              (clicked)="reject()"
+            ></app-button>
+          </div>
+
+          <div class="g-col-6 g-col-md-4 mx-2">
+            <app-button
+              text="Volver"
+              color="secondary"
+              [back]="true"
+            ></app-button>
+          </div>
+
         </div>
       </div>
+
 
       <div class="btns" *ngIf="canMarkPreparing">
         <app-button
