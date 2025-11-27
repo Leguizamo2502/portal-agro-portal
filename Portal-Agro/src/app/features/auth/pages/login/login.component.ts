@@ -129,7 +129,7 @@ export class LoginComponent implements OnInit {
         error: (err) => {
           const msg =
             err?.status === 401
-              ? 'Credenciales inválidas.'
+              ? 'Credenciales inválidas o correo no verificado.'
               : err?.error?.message || 'No se pudo iniciar sesión.';
           Swal.fire({ icon: 'error', title: 'Oops...', text: msg });
         },
