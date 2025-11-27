@@ -62,6 +62,13 @@ export class DriverJsService {
       { element: '#order-summary', popover: { title: 'Resumen', description: 'Producto, precio, cantidad y total.', side: 'right' } },
       { element: '#order-delivery', popover: { title: 'Entrega', description: 'Estos son los datos personales del cliente para que reciva el producto.', side: 'right' } },
       { element: '#order-payment', popover: { title: 'Comprobante de Pago', description: 'Acá deberás revisar el comprobante. También aparecerá con la fecha.', side: 'top' } },
+      {
+      element: '#drv-btn-chat',
+      popover: {
+        title: 'Chat con el Productor',
+        description: 'Haz clic para abrir el chat y comunicarte directamente con el Productor (podrás Escribir al productor cuando acepte el comprobante).'
+      }
+    }
     ],
     '/account/producer/summary':[
       {element:'#producer-layout-summary', popover:{ title: 'Panel principal', description: 'Aquí podrás visualizar un resumen general y gestionar los pedidos realizados por tus clientes.', side:'over'}},
@@ -109,7 +116,8 @@ export class DriverJsService {
       {element:'#list-user', popover:{ title:'Listado de pedidos', description:'Muestra el historial completo de tus pedidos, permitiéndote revisarlos.'}},
       {element:'#view-detail', popover:{ title:'Ver Detalle', description:'Haz clic para ver la información completa del pedido seleccionado, incluyendo productos, cantidades y estado.'}}
     
-    ],'/home/product/profile/:id':[
+    ],
+    '/home/product/profile/:id':[
       {element:'#profile', popover:{ title:'Perfil', description:'Aquí podrás ver la información principal del productor, incluyendo su nombre, ubicación y datos básicos.'}},
       {element:'#orders-complete', popover:{ title:'Pedidos completados', description:'Consulta todos los pedidos que este productor ha entregado. Útil para evaluar su nivel de actividad y compromiso.'}},
       {element:'#review', popover:{ title:'Calificación', description:'Revisa las valoraciones que otros usuarios han dejado sobre el productor y su calidad de servicio.'}},
@@ -118,6 +126,65 @@ export class DriverJsService {
       {element:'#products', popover:{ title:'Productos', description:'Explora las fincas asociadas al productor y conoce su ubicación, características y producción.'}},
       {element:'#social', popover:{ title:'Redes sociales', description:'Accede a las redes sociales del productor para conocer más sobre su trabajo y mantenerse en contacto.'}},
     ],
+    '/account/producer/orders/:code': [
+    {
+      element: '#drv-order-number',
+      popover: {
+        title: 'Número del pedido',
+        description: 'Aquí puedes ver el identificador único de este pedido.'
+      }
+    },
+    {
+      element: '#drv-summary',
+      popover: {
+        title: 'Resumen del pedido',
+        description: 'Encuentra los detalles principales del pedido: producto, cantidad, subtotal y total.'
+      }
+    },
+    {
+      element: '#drv-delivery',
+      popover: {
+        title: 'Datos de entrega',
+        description: 'Aquí verás la información del destinatario, teléfono y dirección.'
+      }
+    },
+    {
+      element: '#drv-times',
+      popover: {
+        title: 'Tiempos del pedido',
+        description: 'En esta sección se muestran las fechas de creación y decisiones tomadas.'
+      }
+    },
+    {
+      element: '#drv-btn-reject',
+      popover: {
+        title: 'Rechazar pedido',
+        description: 'Haz clic aquí si no puedes aceptar este pedido.'
+      }
+    },
+    {
+      element: '#drv-btn-accept',
+      popover: {
+        title: 'Aceptar pedido',
+        description: 'Presiona este botón para aceptar el pedido y continuar el proceso.'
+      }
+    },
+    {
+      element: '#drv-btn-back',
+      popover: {
+        title: 'Volver atrás',
+        description: 'Regresa a la lista de pedidos usando este botón.'
+      }
+    },
+    {
+      element: '#drv-btn-chat',
+      popover: {
+        title: 'Chat con el consumidor',
+        description: 'Haz clic para abrir el chat y comunicarte directamente con el consumidor (el chat se activara al confirmar el comprobante).'
+      }
+    }
+  ]
+
   };
 
   // Obtiene los pasos del tour según la ruta actual
@@ -132,7 +199,9 @@ export class DriverJsService {
     if (!steps && currentUrl.startsWith('/home/product/profile/')) {
       steps = this.tours['/home/product/profile/:id'];
     }
-
+    if (!steps && currentUrl.startsWith('/account/producer/orders/')) {
+    steps = this.tours['/account/producer/orders/:code'];
+    }
     return steps || null;
   }
 

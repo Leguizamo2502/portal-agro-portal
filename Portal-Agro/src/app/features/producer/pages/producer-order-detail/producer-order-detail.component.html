@@ -1,6 +1,6 @@
 <div class="wrapper" *ngIf="!loading && detail; else loadingTpl">
   <div class="header">
-    <h2 class="title">Pedido #{{ detail!.id }}</h2>
+    <h2 class="title" id="drv-order-number">Pedido #{{ detail!.id }}</h2>
     <span class="chip" [ngClass]="chipClass(detail!.status)">
       {{ detail!.status | statusTranslate }}
     </span>
@@ -9,7 +9,7 @@
   <div class="grid">
     <!-- Columna izquierda: info -->
     <section class="card">
-      <h3 class="title">Resumen</h3>
+      <h3 class="title" id="drv-summary">Resumen</h3>
 
       <div class="row">
         <div class="productoS- d-flex gap-1">
@@ -50,7 +50,7 @@
         </div>
       </div>
 
-      <h3 class="mt title">Entrega</h3>
+      <h3 class="mt title" id="drv-delivery">Entrega</h3>
       <div class="row">
         <div class="d-flex gap-1">
           <div class="subtitle">Destinatario:</div>
@@ -78,7 +78,7 @@
         </div>
       </div>
 
-      <h3 class="mt title">Tiempos</h3>
+      <h3 class="mt title" id="drv-times">Tiempos</h3>
       <div class="row">
         <div class="d-flex gap-1">
           <div class="subtitle">Creado:</div>
@@ -130,6 +130,7 @@
 
           <div class="g-col-6 g-col-md-4 mx-2">
             <app-button
+              id="drv-btn-reject"
               text="Rechazar"
               color="danger"
               (clicked)="reject()"
@@ -193,6 +194,7 @@
 
 <!-- Botón flotante de chat -->
 <button
+  id="drv-btn-chat"
   type="button"
   class="order-chat-fab"
   *ngIf="detail"
