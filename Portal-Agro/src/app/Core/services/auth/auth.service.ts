@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { LoginModel, LoginResponseModel, UserMeDto } from '../../Models/login.model';
-import { RegisterUserModel } from '../../Models/registeruser.model';
+import { ConfirmEmailVerificationModel, RegisterUserModel, RequestEmailVerificationModel } from '../../Models/registeruser.model';
 import { PersonUpdateModel, UserSelectModel } from '../../Models/user.model';
 import { ChangePasswordModel, RecoverPasswordConfirmModel, RecoverPasswordModel } from '../../Models/changePassword.model';
 import { OPTIONAL_AUTH } from '../../interceptors/auth/auth-optional.token';
@@ -62,6 +62,14 @@ export class AuthService {
 
   ConfirmRecoverPassword(objeto: RecoverPasswordConfirmModel): Observable<any> {
     return this.http.post<any>(this.urlBase + 'recover/confirm', objeto);
+  }
+
+  RequestEmailVerification(objeto: RequestEmailVerificationModel): Observable<any> {
+    return this.http.post<any>(this.urlBase + 'verify/send-code', objeto);
+  }
+
+  ConfirmEmailVerification(objeto: ConfirmEmailVerificationModel): Observable<any> {
+    return this.http.post<any>(this.urlBase + 'verify/confirm', objeto);
   }
 
   

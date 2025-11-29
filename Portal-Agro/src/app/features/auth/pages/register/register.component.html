@@ -155,6 +155,42 @@
           </div>
         </form>
 
+        <!-- Paso 4: Verificación de correo -->
+        <form [formGroup]="verificationForm" *ngIf="currentStep === 4">
+          <div class="alert alert-info">
+            Te enviamos un código de 6 dígitos al correo <strong>{{ verificationEmail }}</strong>. Ingrésalo para
+            activar tu cuenta. Si no lo encuentras, revisa tu carpeta de spam.
+          </div>
+
+          <div class="mb-2">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input id="email" type="email" class="form-control input-custom" formControlName="email" readonly>
+          </div>
+
+          <div class="mb-2">
+            <label for="code" class="form-label">Código de verificación</label>
+            <div class="d-flex gap-2">
+              <input id="code" type="text" maxlength="6" class="form-control input-custom" formControlName="code"
+                placeholder="Ingresa el código">
+              <button type="button" class="btn btn-outline-success" (click)="resendCode()"
+                [disabled]="resending">
+                {{ resending ? 'Enviando...' : 'Reenviar código' }}
+              </button>
+            </div>
+            <div class="text-danger small" *ngIf="verificationForm.get('code')?.touched && verificationForm.get('code')?.invalid">
+              {{ getErrorMessage(verificationForm, 'code') }}
+            </div>
+          </div>
+
+          <div class="d-grid mt-3">
+            <button type="button" class="btn btn-success btn-custom" (click)="confirmVerification()"
+              [disabled]="verificationForm.invalid">
+              Verificar correo y continuar
+            </button>
+          </div>
+        </form>
+
+
       </div>
     </div>
   </div>

@@ -1,16 +1,29 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
 import Swal from 'sweetalert2';
-import { OrderDetailModel } from '../../../products/models/order/order.model';
-import { OrderService } from '../../../products/services/order/order.service';
-import { CommonModule } from '@angular/common';
+
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { StatusTranslatePipe } from '../../../../shared/pipes/StatusTranslatePipe/status-translate-pipe.pipe';
+import { OrderService } from '../../../products/services/order/order.service';
+import { ConsumerRatingCreateModel } from '../../../products/models/consumerRating/consumerRating.model';
+import { OrderDetailModel } from '../../../products/models/order/order.model';
+import { OrderChatComponent } from '../../../../shared/components/order-chat/order-chat.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-producer-order-detail',
-  imports: [CommonModule, ButtonComponent, StatusTranslatePipe],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ButtonComponent,
+    StatusTranslatePipe,
+    FormsModule,
+    OrderChatComponent,
+    MatIconModule,
+  ],
   templateUrl: './producer-order-detail.component.html',
   styleUrl: './producer-order-detail.component.css',
 })
@@ -23,6 +36,15 @@ export class ProducerOrderDetailComponent implements OnInit {
   detail?: OrderDetailModel;
   loading = true;
 
+  // ======= Rating del cliente =======
+  stars = [1, 2, 3, 4, 5];
+  rating = 0;
+  comment = '';
+  savingRating = false;
+
+  // ======= UI: chat flotante =======
+  showChat = false;
+
   ngOnInit(): void {
     this.code = String(this.route.snapshot.paramMap.get('code'));
     if (!this.code) {
@@ -32,42 +54,136 @@ export class ProducerOrderDetailComponent implements OnInit {
     this.loadDetail();
   }
 
+  // ================== Carga de detalle ==================
   loadDetail(): void {
     this.loading = true;
+
     this.ordersSrv
       .getDetailForProducer(this.code)
       .pipe(take(1))
       .subscribe({
         next: (d) => {
           this.detail = d;
+          this.resetRatingFromDetail();
           this.loading = false;
         },
         error: (err) => {
           this.loading = false;
-          Swal.fire(
-            'Error',
-            err?.error?.message ?? 'No se pudo cargar el pedido.',
-            'error'
+          this.showError(
+            err?.error?.message ?? 'No se pudo cargar el pedido.'
           );
         },
       });
   }
 
-  // ======= Habilitadores de acciones por estado =======
+  private resetRatingFromDetail(): void {
+    if (!this.detail?.consumerRating) {
+      this.rating = 0;
+      this.comment = '';
+      return;
+    }
+
+    this.rating = this.detail.consumerRating.rating;
+    this.comment = this.detail.consumerRating.comment ?? '';
+  }
+
+  // ================== Helpers SweetAlert ==================
+  private showLoading(title: string, text: string): void {
+    Swal.fire({
+      title,
+      text,
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+  }
+
+  private async showSuccess(message: string): Promise<void> {
+    await Swal.fire('OK', message, 'success');
+  }
+
+  private showError(message: string): void {
+    Swal.fire('Error', message, 'error');
+  }
+
+  // ================== Habilitadores por estado ==================
   get canAcceptReject(): boolean {
     return this.detail?.status === 'PendingReview';
   }
+
   get canMarkPreparing(): boolean {
     return this.detail?.status === 'PaymentSubmitted';
   }
+
   get canMarkDispatched(): boolean {
     return this.detail?.status === 'Preparing';
   }
+
   get canMarkDelivered(): boolean {
     return this.detail?.status === 'Dispatched';
   }
 
-  // ======= Chip de estado (clases CSS) =======
+  // ================== Rating: helpers ==================
+  get isAlreadyRated(): boolean {
+    return !!this.detail?.consumerRating;
+  }
+
+  setRating(value: number): void {
+    if (this.savingRating) return;
+    this.rating = value;
+  }
+
+  onRateCustomer(): void {
+    if (!this.detail) return;
+
+    if (this.detail.status !== 'Completed') {
+      this.showError('Solo puedes calificar cuando la orden está completada.');
+      return;
+    }
+
+    if (this.rating < 1 || this.rating > 5) {
+      this.showError('Selecciona una calificación entre 1 y 5.');
+      return;
+    }
+
+    const body: ConsumerRatingCreateModel = {
+      rating: this.rating,
+      comment: this.comment?.trim() || null,
+      rowVersion: this.detail.rowVersion,
+    };
+
+    this.savingRating = true;
+    this.showLoading(
+      'Guardando...',
+      'Registrando la calificación del cliente.'
+    );
+
+    this.ordersSrv
+      .rateCustomer(this.code, body)
+      .pipe(take(1))
+      .subscribe({
+        next: (res) => {
+          this.savingRating = false;
+          Swal.close();
+
+          if (this.detail) {
+            this.detail.consumerRating = res.data;
+          }
+
+          this.showSuccess(
+            'La calificación del cliente se guardó correctamente.'
+          );
+        },
+        error: (err) => {
+          this.savingRating = false;
+          Swal.close();
+          this.showError(
+            err?.error?.message ?? 'No se pudo registrar la calificación.'
+          );
+        },
+      });
+  }
+
+  // ================== Chip de estado ==================
   chipClass(
     status: string
   ):
@@ -79,33 +195,32 @@ export class ProducerOrderDetailComponent implements OnInit {
     | 'disputed' {
     const s = (status || '').toLowerCase();
 
-    // Pendiente de decisión o de confirmación del comprador
     if (s === 'pendingreview' || s === 'deliveredpendingbuyerconfirm')
       return 'pending';
 
-    // Aceptado/avance del flujo
     if (
-      s === 'acceptedawaitingpayment' || // nuevo
-      s === 'paymentsubmitted' ||        // nuevo
-      s === 'preparing' ||               // nuevo
-      s === 'dispatched'                 // nuevo
-    ) return 'progress';
+      s === 'acceptedawaitingpayment' ||
+      s === 'paymentsubmitted' ||
+      s === 'preparing' ||
+      s === 'dispatched'
+    )
+      return 'progress';
 
     if (s === 'completed') return 'completed';
     if (s === 'rejected' || s === 'expired' || s === 'cancelledbyuser')
       return 'rejected';
     if (s === 'disputed') return 'disputed';
 
-    // fallback
     return 'accepted';
   }
 
+  // ================== Utilidades ==================
   openReceipt(): void {
     const url = this.detail?.paymentImageUrl;
     if (url) window.open(url, '_blank');
   }
 
-  // ======= Acciones =======
+  // ================== Acciones de estado ==================
   async accept(): Promise<void> {
     if (!this.detail) return;
 
@@ -123,6 +238,8 @@ export class ProducerOrderDetailComponent implements OnInit {
 
     if (!isConfirmed) return;
 
+    this.showLoading('Procesando...', 'Aceptando el pedido.');
+
     this.ordersSrv
       .acceptOrder(this.code, {
         notes: notes || undefined,
@@ -131,12 +248,14 @@ export class ProducerOrderDetailComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: async () => {
-          await Swal.fire('OK', 'Pedido aceptado.', 'success');
-          this.loadDetail(); // refresca para traer nuevo estado/rowVersion
+          Swal.close();
+          await this.showSuccess('Pedido aceptado.');
+          this.loadDetail();
         },
         error: (err) => {
+          Swal.close();
           const msg = err?.error?.message || 'No se pudo aceptar.';
-          Swal.fire('Error', msg, 'error');
+          this.showError(msg);
         },
       });
   }
@@ -162,6 +281,8 @@ export class ProducerOrderDetailComponent implements OnInit {
 
     if (!isConfirmed || !reason) return;
 
+    this.showLoading('Procesando...', 'Rechazando el pedido.');
+
     this.ordersSrv
       .rejectOrder(this.code, {
         reason,
@@ -170,62 +291,100 @@ export class ProducerOrderDetailComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: async () => {
-          await Swal.fire('OK', 'Pedido rechazado.', 'success');
+          Swal.close();
+          await this.showSuccess('Pedido rechazado.');
           this.loadDetail();
         },
         error: (err) => {
+          Swal.close();
           const msg = err?.error?.message || 'No se pudo rechazar.';
-          Swal.fire('Error', msg, 'error');
+          this.showError(msg);
         },
       });
   }
 
   markPreparing(): void {
     if (!this.detail) return;
+
+    this.showLoading(
+      'Actualizando...',
+      'Marcando la orden como en preparación.'
+    );
+
     this.ordersSrv
       .markPreparing(this.code, this.detail.rowVersion)
       .pipe(take(1))
       .subscribe({
         next: async () => {
-          await Swal.fire('OK', 'Orden en preparación.', 'success');
+          Swal.close();
+          await this.showSuccess('Orden en preparación.');
           this.loadDetail();
         },
-        error: (err) =>
-          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error'),
+        error: (err) => {
+          Swal.close();
+          this.showError(
+            err?.error?.message ?? 'No se pudo marcar la orden.'
+          );
+        },
       });
   }
 
   markDispatched(): void {
     if (!this.detail) return;
+
+    this.showLoading(
+      'Actualizando...',
+      'Marcando la orden como despachada.'
+    );
+
     this.ordersSrv
       .markDispatched(this.code, this.detail.rowVersion)
       .pipe(take(1))
       .subscribe({
         next: async () => {
-          await Swal.fire('OK', 'Orden despachada.', 'success');
+          Swal.close();
+          await this.showSuccess('Orden despachada.');
           this.loadDetail();
         },
-        error: (err) =>
-          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error'),
+        error: (err) => {
+          Swal.close();
+          this.showError(
+            err?.error?.message ?? 'No se pudo marcar la orden.'
+          );
+        },
       });
   }
 
   markDelivered(): void {
     if (!this.detail) return;
+
+    this.showLoading(
+      'Actualizando...',
+      'Marcando la orden como entregada...'
+    );
+
     this.ordersSrv
       .markDelivered(this.code, this.detail.rowVersion)
       .pipe(take(1))
       .subscribe({
         next: async () => {
-          await Swal.fire(
-            'OK',
-            'Orden entregada (pendiente de confirmación del cliente).',
-            'success'
+          Swal.close();
+          await this.showSuccess(
+            'Orden entregada (pendiente de confirmación del cliente).'
           );
           this.loadDetail();
         },
-        error: (err) =>
-          Swal.fire('Error', err?.error?.message ?? 'No se pudo marcar.', 'error'),
+        error: (err) => {
+          Swal.close();
+          this.showError(
+            err?.error?.message ?? 'No se pudo marcar la orden.'
+          );
+        },
       });
+  }
+
+  // ================== Chat flotante ==================
+  toggleChat(): void {
+    this.showChat = !this.showChat;
   }
 }

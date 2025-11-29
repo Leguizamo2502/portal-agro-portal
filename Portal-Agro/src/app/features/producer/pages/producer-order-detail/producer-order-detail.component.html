@@ -1,6 +1,6 @@
 <div class="wrapper" *ngIf="!loading && detail; else loadingTpl">
   <div class="header">
-    <h2 class="title">Pedido #{{ detail!.id }}</h2>
+    <h2 class="title" id="drv-order-number">Pedido #{{ detail!.id }}</h2>
     <span class="chip" [ngClass]="chipClass(detail!.status)">
       {{ detail!.status | statusTranslate }}
     </span>
@@ -9,76 +9,95 @@
   <div class="grid">
     <!-- Columna izquierda: info -->
     <section class="card">
-      <h3 class="title">Resumen</h3>
+      <h3 class="title" id="drv-summary">Resumen</h3>
+
       <div class="row">
-        <div class="productoS- d-flex gap-1"><div class="subtitle">
-          Producto:
+        <div class="productoS- d-flex gap-1">
+          <div class="subtitle">Producto:</div>
+          <div class="text">{{ detail!.productName }}</div>
         </div>
-        <div class="text"> {{ detail!.productName }}</div>
+
+        <div class="d-flex gap-1">
+          <div class="subtitle">Cantidad:</div>
+          <div class="text">
+            {{ detail!.quantityRequested }}
+          </div>
+        </div>
       </div>
-        <div class="d-flex gap-1"><div class="subtitle">Cantidad:</div>
-        <div class="text">
-          {{ detail!.quantityRequested }}
-        </div>
-        </div>
-      </div>
+
       <div class="row">
         <div class="precioUni-co d-flex gap-1">
-          <div class="subtitle ">
-            Precio unitario:
-          </div>
+          <div class="subtitle">Precio unitario:</div>
           <div class="text">
-            {{ detail!.unitPrice | currency : "COP" }}
+            {{ detail!.unitPrice | currency: 'COP' }}
           </div>
         </div>
+
         <div class="subtotal-cop d-flex gap-1">
-          <div class="subtitle ">Subtotal: </div>
-          <div class="text">{{ detail!.subtotal | currency : "COP" }}</div>
+          <div class="subtitle">Subtotal:</div>
+          <div class="text">
+            {{ detail!.subtotal | currency: 'COP' }}
+          </div>
         </div>
       </div>
+
       <div class="row total">
         <div class="d-flex gap-1">
-          <div class="subtitle">Total:</div> 
+          <div class="subtitle">Total:</div>
           <div class="text">
-
-            {{ detail!.total | currency : "COP" }}
+            {{ detail!.total | currency: 'COP' }}
           </div>
         </div>
       </div>
 
-      <h3 class="mt title">Entrega</h3>
+      <h3 class="mt title" id="drv-delivery">Entrega</h3>
       <div class="row">
-        <div class="d-flex gap-1"><div class="subtitle">Destinatario:</div> <div class="text">{{ detail!.recipientName }}</div></div>
-        <div class="d-flex gap-1"><div class="subtitle">Teléfono:</div> <div class="text">{{ detail!.contactPhone }}</div></div>
+        <div class="d-flex gap-1">
+          <div class="subtitle">Destinatario:</div>
+          <div class="text">{{ detail!.recipientName }}</div>
+        </div>
+
+        <div class="d-flex gap-1">
+          <div class="subtitle">Teléfono:</div>
+          <div class="text">{{ detail!.contactPhone }}</div>
+        </div>
       </div>
+
       <div class="row">
         <div class="col-span-2 d-flex gap-1">
           <div class="subtitle">Dirección:</div>
           <div class="text">
             {{ detail!.addressLine1 }}
-
-            <ng-container *ngIf="detail!.addressLine2">, {{ detail!.addressLine2 }}</ng-container>
-            <ng-container *ngIf="detail!.cityName">, {{ detail!.cityName }}</ng-container>
+            <ng-container *ngIf="detail!.addressLine2">
+              , {{ detail!.addressLine2 }}
+            </ng-container>
+            <ng-container *ngIf="detail!.cityName">
+              , {{ detail!.cityName }}
+            </ng-container>
           </div>
         </div>
       </div>
 
-      <h3 class="mt title">Tiempos</h3>
+      <h3 class="mt title" id="drv-times">Tiempos</h3>
       <div class="row">
         <div class="d-flex gap-1">
-          <div class="subtitle">Creado: </div>
-          <div class="text"> {{ detail!.createAt | date : "mediumDate" : "" : "es-CO" }}</div>
+          <div class="subtitle">Creado:</div>
+          <div class="text">
+            {{ detail!.createAt | date: 'mediumDate':'':'es-CO' }}
+          </div>
         </div>
+
         <div *ngIf="detail!.producerDecisionAt">
           <strong>Decisión productor:</strong>
-          {{ detail!.producerDecisionAt | date : "mediumDate" : "" : "es-CO" }}
+          {{ detail!.producerDecisionAt | date: 'mediumDate':'':'es-CO' }}
         </div>
       </div>
     </section>
 
-    <!-- Columna derecha: acciones / comprobante -->
+    <!-- Columna derecha: acciones / comprobante / rating -->
     <section class="card actions">
       <h3 class="title">Comprobante</h3>
+
       <div class="receipt" *ngIf="detail!.paymentImageUrl; else noReceipt">
         <img
           [src]="detail!.paymentImageUrl!"
@@ -87,6 +106,7 @@
         />
         <small class="muted">Clic para abrir en nueva pestaña</small>
       </div>
+
       <ng-template #noReceipt>
         <p class="muted">
           Sin comprobante
@@ -97,37 +117,72 @@
       </ng-template>
 
       <!-- Acciones por estado -->
-      <div class="btns" *ngIf="canAcceptReject">
-        <div class="btns-last-Bottom">
-          <div class="d-flex gap-2">
-            <app-button text="Rechazar" color="danger" (clicked)="reject()"></app-button>
-            <app-button text="Aceptar" color="primary" (clicked)="accept()"></app-button>
+      <div class="mt-auto" *ngIf="canAcceptReject">
+        <div class="g-2 mt-4 justify-content-center d-flex actions-buttons">
+
+          <div class="g-col-6 g-col-md-4 mx-2">
+            <app-button
+              text="Aceptar"
+              color="primary"
+              (clicked)="accept()"
+            ></app-button>
           </div>
-          <app-button text="Volver" color="secondary" [back]="true"></app-button>
+
+          <div class="g-col-6 g-col-md-4 mx-2">
+            <app-button
+              id="drv-btn-reject"
+              text="Rechazar"
+              color="danger"
+              (clicked)="reject()"
+            ></app-button>
+          </div>
+
+          <div class="g-col-6 g-col-md-4 mx-2">
+            <app-button
+              text="Volver"
+              color="secondary"
+              [back]="true"
+            ></app-button>
+          </div>
+
         </div>
       </div>
 
-
       <div class="btns" *ngIf="canMarkPreparing">
-        <app-button text="Marcar como “Preparando”" color="primary" (clicked)="markPreparing()"></app-button>
+        <app-button
+          text="Marcar como “Preparando”"
+          color="primary"
+          (clicked)="markPreparing()"
+        ></app-button>
       </div>
 
       <div class="btns" *ngIf="canMarkDispatched">
-        <app-button text="Marcar como “Despachado”" color="primary" (clicked)="markDispatched()"></app-button>
+        <app-button
+          text="Marcar como “Despachado”"
+          color="primary"
+          (clicked)="markDispatched()"
+        ></app-button>
       </div>
 
       <div class="btns" *ngIf="canMarkDelivered">
-        <app-button text="Marcar “Entregado (pendiente confirmación)”" color="primary" (clicked)="markDelivered()"></app-button>
+        <app-button
+          text="Marcar “Entregado (pendiente confirmación)”"
+          color="primary"
+          (clicked)="markDelivered()"
+        ></app-button>
       </div>
 
       <div
-        *ngIf="!canAcceptReject && !canMarkPreparing && !canMarkDispatched && !canMarkDelivered"
+        *ngIf="
+          !canAcceptReject &&
+          !canMarkPreparing &&
+          !canMarkDispatched &&
+          !canMarkDelivered
+        "
         class="muted"
       >
         No hay acciones disponibles para el estado actual.
       </div>
-
-      
     </section>
   </div>
 </div>
@@ -135,3 +190,33 @@
 <ng-template #loadingTpl>
   <p class="muted">Cargando detalle…</p>
 </ng-template>
+
+<!-- Botón flotante de chat -->
+<button
+  id="drv-btn-chat"
+  type="button"
+  class="order-chat-fab"
+  *ngIf="detail"
+  (click)="toggleChat()"
+>
+  <mat-icon>chat</mat-icon>
+</button>
+
+<!-- Panel flotante con el chat -->
+<div class="order-chat-overlay" *ngIf="showChat && detail">
+  <div class="order-chat-panel">
+    <div class="order-chat-panel-header">
+      <span>Chat con el cliente (Pedido #{{ detail!.id }})</span>
+      <button
+        type="button"
+        class="order-chat-close"
+        (click)="toggleChat()"
+        aria-label="Cerrar chat"
+      >
+        ×
+      </button>
+    </div>
+
+    <app-order-chat [orderCode]="code"></app-order-chat>
+  </div>
+</div>
