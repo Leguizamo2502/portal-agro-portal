@@ -3,6 +3,7 @@ export const environment = {
     // apiUrl: 'https://web20251124155458-chefafacbmaxerdc.canadacentral-01.azurewebsites.net/api/v1/'
     // apiUrl: 'https://localhost/api/v1/'
     // apiUrl: 'http://localhost:8080/api/v1/'
-    apiUrl:'http://localhost:5100/api/v1/' //Jenkins
+    apiUrl:'http://localhost:5101/api/v1/'
+
 
 };
