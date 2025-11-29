@@ -1,0 +1,123 @@
+<div class="chat-wrapper">
+  <div class="chat-header">
+    <div class="chat-title">
+      Chat del pedido
+      <span class="chat-order-code">{{ orderCode }}</span>
+    </div>
+  </div>
+
+  <!-- Banner de estado del chat -->
+  <div class="chat-state" *ngIf="isChatClosed || !canSendMessages">
+    <div
+      class="chat-state-msg"
+      [ngClass]="{ closed: isChatClosed, disabled: !isChatClosed }"
+    >
+      <ng-container *ngIf="isChatClosed; else disabledTpl">
+        {{ chatClosedReason || 'El chat fue cerrado para este pedido.' }}
+      </ng-container>
+
+      <ng-template #disabledTpl>
+        {{ chatDisabledReason || 'El chat no está disponible en este momento.' }}
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="chat-body">
+    <div class="chat-messages-header">
+      <button
+        type="button"
+        class="chat-load-more"
+        (click)="loadMore()"
+        [disabled]="loading || !hasMore"
+      >
+        {{ hasMore ? 'Cargar más mensajes' : 'No hay más mensajes' }}
+      </button>
+    </div>
+
+    <div class="chat-messages-container" #scrollContainer>
+      <ng-container *ngIf="messages.length; else noMessages">
+        <div
+          *ngFor="let msg of messages; trackBy: trackById"
+          [ngClass]="{
+            'msg-row': true,
+            'msg-mine': msg.isMine && !msg.isSystem,
+            'msg-theirs': !msg.isMine && !msg.isSystem,
+            'msg-system': msg.isSystem
+          }"
+        >
+          <ng-container *ngIf="!msg.isSystem; else systemTemplate">
+            <div class="msg-bubble">
+              <div class="msg-meta">
+                <!-- <span class="msg-sender">
+                  {{
+                    msg.senderType === 'Customer'
+                      ? 'Consumidor'
+                      : msg.senderType === 'Producer'
+                      ? 'Productor'
+                      : 'Usuario'
+                  }}
+                </span> -->
+                <span class="msg-time">
+                  {{ msg.sentAtUtc | date : 'short' }}
+                </span>
+              </div>
+              <div class="msg-text">
+                {{ msg.message }}
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-template #systemTemplate>
+            <div class="msg-system-bubble">
+              <span class="msg-system-text">
+                {{ msg.message }}
+              </span>
+            </div>
+          </ng-template>
+        </div>
+      </ng-container>
+
+      <ng-template #noMessages>
+        <div class="chat-empty">
+          <ng-container *ngIf="canSendMessages; else noSendTpl">
+            No hay mensajes en este chat. Escribe el primero.
+          </ng-container>
+          <ng-template #noSendTpl>
+            No hay mensajes en este chat. El chat se habilitará cuando esté
+            disponible para este pedido.
+          </ng-template>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="chat-footer">
+    <div class="chat-error" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <div class="chat-input-row">
+      <textarea
+        [(ngModel)]="newMessage"
+        class="chat-input"
+        rows="2"
+        placeholder="Escribe un mensaje..."
+        [disabled]="sending || !canSendMessages"
+        (keydown.enter)="onEnter($event)"
+      ></textarea>
+
+      <button
+        type="button"
+        class="chat-send-btn"
+        (click)="send()"
+        [disabled]="sending || !newMessage.trim() || !canSendMessages"
+      >
+        Enviar
+      </button>
+    </div>
+  </div>
+
+  <div class="chat-loading-overlay" *ngIf="loading && !messages.length">
+    <div class="chat-loading-spinner"></div>
+  </div>
+</div>

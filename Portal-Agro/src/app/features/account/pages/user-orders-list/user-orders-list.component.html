@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" id="user-product-list">
   <h2 class="title">Mis pedidos</h2>
 
   <!-- prueba cantidad de pedidos -->
@@ -12,7 +12,7 @@
   </app-stat-card> -->
   
   <ng-container *ngIf="!loading; else loadingTpl">
-    <div *ngIf="items.length; else emptyTpl" class="list">
+    <div *ngIf="items.length; else emptyTpl" class="list" id="list-user">
       <div class="card" *ngFor="let o of items; trackBy: trackById">
         <div class="row1">
           <div class="prod">{{ o.productName }}</div>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="actions">
-          <app-button text="Ver detalle" color="secondary" (clicked)="view(o.code)"></app-button>
+          <app-button id="view-detail" text="Ver detalle" color="secondary" (clicked)="view(o.code)"></app-button>
 
           <!-- Subir comprobante -->
           <input type="file" accept="image/*" #uploader hidden (change)="onPickPaymentFile(o.code, $event)" />

@@ -30,10 +30,10 @@
      <!-- Botones de acción si está habilitado -->
     <div *ngIf="showActions" class="actions">
       <button mat-icon-button color="primary" (click)="edit.emit(farm)">
-        <mat-icon class="icon-edit">edit</mat-icon>
+        <mat-icon id="edit-btn-farm" class="icon-edit">edit</mat-icon>
       </button>
       <button mat-icon-button color="warn" (click)="delete.emit(farm)">
-        <mat-icon class="icon-delete">delete</mat-icon>
+        <mat-icon id="delete-btn-farm" class="icon-delete">delete</mat-icon>
       </button>
     </div>
   </mat-card-content>
