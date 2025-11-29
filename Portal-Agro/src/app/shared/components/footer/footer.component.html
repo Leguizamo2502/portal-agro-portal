@@ -1,32 +1,50 @@
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-left">
-      <h3 class="footer-title">Portal Agro Comercial</h3>
-      <p class="footer-text">
-        Conectamos a los productores del Huila con consumidores que valoran la
-        calidad y el origen.
-      </p>
+<footer class="footer bg-dark-green text-white pt-4 pb-3">
+  <div class="container">
+    <div class="row align-items-center text-center text-md-start">
 
-      <p class="footer-meta">{{ location }}</p>
-      <p class="footer-meta">{{ email }}</p>
+      <!-- IZQUIERDA -->
+      <div class="col-md-4 mb-4 mb-md-0">
+        <h3 class="footer-title">Portal Agro Comercial</h3>
+        <p class="footer-text">
+          Conectamos a los productores del Huila con consumidores que valoran
+          la calidad y el origen.
+        </p>
+
+        <p class="footer-meta">{{ location }}</p>
+        <p class="footer-meta">{{ email }}</p>
+      </div>
+
+      <!-- CENTRO -->
+      <div class="col-md-4 mb-4 mb-md-0 text-center">
+        <img
+          src="logos/logo.png"
+          alt="Logo Agro Comercial"
+          class="footer-logo img-fluid"
+        />
+      </div>
+
+      <!-- DERECHA -->
+      <div class="col-md-4 text-center text-md-end">
+        <p class="footer-call">Descarga nuestra aplicación para Android</p>
+        <p class="footer-subtext">Disponible en formato APK</p>
+
+        <a
+          class="download-app-btn"
+          [href]="appDownloadUrl"
+          target="_blank"
+          rel="noopener"
+        >
+          <i class="bi bi-android2 me-2"></i>
+          Descargar
+        </a>
+
+      </div>
+
     </div>
 
-    <div class="footer-right">
-      <p class="footer-call">Obtén nuestra app</p>
-
-      <!-- Botón SIEMPRE habilitado -->
-      <a
-        class="download-app-btn"
-        [href]="appDownloadUrl"
-        target="_blank"
-        rel="noopener"
-      >
-        Descargar APK
-      </a>
+    <!-- Derechos de autor -->
+    <div class="footer-bottom text-center mt-4 pt-3 border-top">
+      © 2025 Portal Agro Comercial del Huila
     </div>
-  </div>
-
-  <div class="footer-bottom">
-    © 2025 Portal Agro Comercial del Huila
   </div>
 </footer>

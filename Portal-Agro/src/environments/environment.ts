@@ -1,6 +1,6 @@
 export const environment = {
     // apiUrl:'http://localhost:8080/api/v1/'
     // apiUrl: 'https://web20251124155458-chefafacbmaxerdc.canadacentral-01.azurewebsites.net/api/v1/'
-    apiUrl:'http://localhost:5100/api/v1/'
+    // apiUrl:'http://localhost:5100/api/v1/'
     
 };
