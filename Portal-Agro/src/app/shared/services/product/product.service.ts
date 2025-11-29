@@ -55,6 +55,12 @@ export class ProductService {
     return this.http.get<ProductSelectModel[]>(this.urlBase + '/by-producer');
   }
 
+  getLowStockByProducer(): Observable<ProductSelectModel[]> {
+    return this.http.get<ProductSelectModel[]>(
+      this.urlBase + '/by-producer/low-stock'
+    );
+  }
+
   /** Obtener fincas de prodcutor por code */
   public getProductByCodeProducer(
     codeProducer: string

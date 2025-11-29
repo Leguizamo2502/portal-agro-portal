@@ -1,6 +1,6 @@
 // MODELOS / TIPOS
 
-import { ConsumerRatingModel } from "../consumerRating/consumerRating.model";
+import { ConsumerRatingModel } from '../consumerRating/consumerRating.model';
 
 export interface OrderCreateModel {
   productId: number;
@@ -51,7 +51,6 @@ export interface OrderListItemModel {
   // OJO: el backend envía "CreateAt" => JSON "createAt"
   createAt: string; // ISO
   paymentImageUrl?: string | null;
-  
 }
 
 export interface OrderDetailModel {
@@ -91,14 +90,14 @@ export interface OrderDetailModel {
 
   // Cliente
   userReceivedAt?: string | null;
-// Calificacion
+  // Calificacion
   consumerRating?: ConsumerRatingModel | null;
   customerAverageRating?: number | null;
   customerRatingsCount: number;
 
   // Metadatos
-  createAt: string;          // ISO (ojo con el nombre)
-  rowVersion: string;        // Base64 para concurrencia
+  createAt: string; // ISO (ojo con el nombre)
+  rowVersion: string; // Base64 para concurrencia
 }
 
 // REQUESTS

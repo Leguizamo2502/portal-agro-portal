@@ -88,13 +88,13 @@
     <!-- Acciones -->
     <div *ngIf="showActions && !loading" class="actions">
       <button mat-icon-button color="primary" (click)="onEditClick($event)" aria-label="Editar producto">
-        <mat-icon class="icon-edit">edit</mat-icon>
+        <mat-icon id="edit-Btn" class="icon-edit">edit</mat-icon>
       </button>
       <button mat-icon-button color="accent" (click)="onEditStockClick($event)" aria-label="Actualizar stock">
-        <mat-icon>inventory_2</mat-icon>
+        <mat-icon id="stock">inventory_2</mat-icon>
       </button>
       <button mat-icon-button color="warn" (click)="onDeleteClick($event)" aria-label="Eliminar producto">
-        <mat-icon class="icon-delete">delete</mat-icon>
+        <mat-icon id="delete-Btn" class="icon-delete">delete</mat-icon>
       </button>
     </div>
 

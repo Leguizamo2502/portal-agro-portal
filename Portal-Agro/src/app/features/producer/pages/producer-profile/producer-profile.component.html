@@ -1,79 +1,83 @@
-<div class="container my-3 profile-container">
+<div class="container my-3 profile-container" id="profile">
   <div class="card shadow-lg p-4 rounded-4">
-    <!-- HEADER -->
-    <div class="row align-items-center text-center text-md-start">
-      <div class="row align-items-center">
-        <!-- FOTO DE PERFIL -->
-        <div class="col-md-6 mb-3 d-flex flex-column align-items-center">
-          <img
-            [src]="
-              'https://cdn-icons-png.freepik.com/256/5447/5447108.png?semt=ais_white_label'
-            "
-            class="rounded-circle shadow-sm mb-3 img-profile"
-            alt="Foto productor"
-            width="150"
-            height="150"
-          />
 
-          <h4 class="fw-bold mb-1">{{ producer?.fullName }}</h4>
-          <!-- <p class="text-muted mb-2">{{ producer?.email }}</p> -->
+    <!-- HEADER ESTILO INSTAGRAM -->
+    <div class="row align-items-center mb-3">
 
-          <!-- Teléfono (sin emoji) -->
-          <!-- <p class="mb-2" *ngIf="producer?.phoneNumber">
-            <span>{{ producer?.phoneNumber }}</span>
-          </p> -->
+      <!-- FOTO -->
+      <div class="col-12 col-md-3 text-center mb-3">
+        <img
+          [src]="
+            'https://cdn-icons-png.freepik.com/256/5447/5447108.png?semt=ais_white_label'
+          "
+          class="rounded-circle shadow-sm mb-2 img-profile"
+          alt="Foto productor"
+          width="150"
+          height="150"
+        />
+      </div>
 
-          <!-- Indicadores de confianza -->
-          <div class="metrics">
-            <!-- Ya existente -->
-            <mat-chip
-              [ngClass]="trustLevelClass(saleNumber)"
-              matTooltip="Pedidos que llegaron a estado Completado. Un mayor número sugiere cumplimiento y confiabilidad."
-              matTooltipPosition="above"
-            >
-              <mat-icon class="me-1">verified</mat-icon>
-              Pedidos completados: {{ compact(saleNumber) }}
-            </mat-chip>
+      <!-- INFO A LA DERECHA (Nombre, métricas, redes, QR) -->
+      <div class="col-12 col-md-9">
 
-            <!-- NUEVO: promedio de calificación -->
-            <mat-chip
-              class="ms-2"
-              matTooltip="Promedio de calificación de los productos de este productor."
-              matTooltipPosition="above"
-            >
-              <mat-icon class="me-1">star</mat-icon>
-              {{ formatAvg() }} / 5
-            </mat-chip>
+        <!-- NOMBRE + QR -->
+        <div class="d-flex align-items-center flex-wrap gap-3">
+          <h2 class="fw-bold mb-0">{{ producer?.fullName }}</h2>
 
-            
-          </div>
-        </div>
-
-        <!-- QR -->
-        <div
-          class="col-md-6 d-flex justify-content-md-end justify-content-center"
-        >
           <img
             [src]="
               producer?.qrUrl ||
               'https://cdn-icons-png.flaticon.com/512/2089/2089670.png'
             "
-            width="150"
+            width="70"
             alt="QR"
-            class="shadow-sm rounded"
+            class="shadow-sm rounded d-none d-md-block"
           />
         </div>
+        
+        <!-- REDES SOCIALES COMO BURBUJAS -->
+        <div class="d-flex flex-wrap gap-2">
+          <a
+            *ngFor="let n of producer?.networks"
+            class="social-badge"
+            [href]="n.url"
+            target="_blank"
+            rel="noopener"
+            matTooltip="{{ n.url }}"
+            matTooltipPosition="above"
+          >
+            <mat-icon>{{ n.network | socialNetworkIcon }}</mat-icon>
+          </a>
+        </div>
+        <!-- MÉTRICAS estilo Instagram -->
+        <div class="d-flex flex-wrap align-items-center gap-4 mb-3">
+
+          <div class="metric-item">
+            <span class="metric-number">{{ compact(saleNumber) }}</span>
+            <span class="metric-label">Completados</span>
+          </div>
+
+          <div class="metric-item">
+            <span class="metric-number">{{ formatAvg() }}</span>
+            <span class="metric-label">Calificación</span>
+          </div>
+
+        </div>
+
+
       </div>
     </div>
+
     <hr />
 
     <!-- Descripción -->
-    <section class="my-4" *ngIf="producer?.description">
+    <section id="description" class="my-4" *ngIf="producer?.description">
       <h5 class="title">Descripción</h5>
       <p class="text-secondary">{{ producer?.description }}</p>
     </section>
 
-    <section class="my-4" *ngIf="producer?.networks?.length">
+    <!-- Redes (si también quieres mantener la sección se puede dejar o quitar) -->
+    <!-- <section class="my-4" id="social" *ngIf="producer?.networks?.length">
       <h5 class="title">Redes sociales</h5>
       <div class="d-flex flex-wrap gap-2">
         <a
@@ -89,22 +93,22 @@
             <mat-icon class="me-1">{{
               n.network | socialNetworkIcon
             }}</mat-icon>
-            <!-- {{ n.network | socialNetworkLabel }} -->
           </mat-chip>
         </a>
       </div>
-    </section>
+    </section> -->
 
-    <section class="my-4">
+    <section class="my-4" id="farms">
       <h5 class="mb-3 title">Fincas</h5>
       <app-container-card-productor [items]="famrs" [type]="'farm'">
       </app-container-card-productor>
     </section>
 
-    <section class="my-4">
+    <section class="my-4" id="products">
       <h5 class="mb-3 title">Productos</h5>
       <app-container-card-productor [items]="products" [type]="'product'">
       </app-container-card-productor>
     </section>
+
   </div>
 </div>
