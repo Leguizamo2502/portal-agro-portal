@@ -97,6 +97,16 @@ export const ACCOUNT_ROUTES: Routes = [
         loadChildren: () =>
           import('../producer/producer.routes').then((m) => m.PRODUCER_ROUTES),
       },
+      //admin
+      {
+        path: 'admin',
+        canMatch: [roleMatchGuard],
+        data: { roles: ['Admin'] },
+        loadChildren: () =>
+          import('../admin/admin.routes').then(
+            (m) => m.ADMIN_ROUTES
+          ),
+      },
       {
         path: 'security',
         canMatch: [roleMatchGuard],

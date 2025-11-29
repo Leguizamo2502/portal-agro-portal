@@ -15,6 +15,8 @@ import { ProductSelectModel } from '../../../../shared/models/product/product.mo
 import { FarmSelectModel } from '../../../../shared/models/farm/farm.model';
 import { ProducerSelectModel } from '../../../../shared/models/producer/producer.model';
 import { ContainerCardProductorComponent } from '../../../../shared/components/cards/container-card-productor/container-card-productor.component';
+
+// Pipes
 import { SocialNetworkIconPipe } from '../../../../shared/pipes/social-network-icon/social-network-icon.pipe';
 import { SocialNetworkLabelPipe } from '../../../../shared/pipes/social-network-label/social-network-label.pipe';
 
@@ -27,7 +29,10 @@ import { SocialNetworkLabelPipe } from '../../../../shared/pipes/social-network-
     MatChipsModule,
     MatTooltipModule,
     MatIconModule,
+
+    /** ⬇️ AGREGADOS: Pipes para iconos y labels */
     SocialNetworkIconPipe,
+    SocialNetworkLabelPipe,
   ],
   templateUrl: './producer-profile.component.html',
   styleUrls: ['./producer-profile.component.css'],
@@ -79,7 +84,6 @@ export class ProducerProfileComponent implements OnInit {
   loadSalenumber() {
     this.producerService.getSalesNumberByCode(this.code).subscribe((data) => {
       this.saleNumber = data ?? 0;
-      // console.log(this.saleNumber);
     });
   }
 
@@ -89,7 +93,6 @@ export class ProducerProfileComponent implements OnInit {
     return 'trust-low';
   }
 
-  /** Formateo compacto (1.2k, 3.4M). Fallback si Intl no soporta compact. */
   compact(n: number): string {
     try {
       return new Intl.NumberFormat('es-CO', {
@@ -99,7 +102,8 @@ export class ProducerProfileComponent implements OnInit {
     } catch {
       if (n >= 1_000_000)
         return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
-      if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
+      if (n >= 1_000)
+        return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
       return String(n);
     }
   }
@@ -108,15 +112,13 @@ export class ProducerProfileComponent implements OnInit {
     return this.producer?.averageRating ?? 0;
   }
 
-  /** 1..5: retorna el icono adecuado según el promedio (★, ☆ y medio) */
   iconForStar(pos: number): string {
     const v = this.avg;
-    if (v >= pos) return 'star'; // llena
-    if (v >= pos - 0.5) return 'star_half'; // media
-    return 'star_border'; // vacía
+    if (v >= pos) return 'star';
+    if (v >= pos - 0.5) return 'star_half';
+    return 'star_border';
   }
 
-  /** 1 decimal, ej. 4.2 */
   formatAvg(): string {
     return this.avg.toFixed(1);
   }

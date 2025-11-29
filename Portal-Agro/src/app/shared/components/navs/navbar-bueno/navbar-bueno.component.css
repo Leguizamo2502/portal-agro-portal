@@ -6,7 +6,6 @@
   z-index: 1020;
 }
 
-/* Estilo para texto blanco */
 .custom-text {
   color: #ffffff !important;
 }
@@ -15,18 +14,15 @@
   color: #1cc736 !important;
 }
 
-/* Estilo para el título en la barra */
 .color-title {
   color: #ffffff !important;
 }
 
-/* Logo */
 .logo {
   height: 5vh;
   width: auto;
 }
 
-/* Estilos de la sección de la marca (logo y título) en escritorio */
 .navbar-brand-section {
   display: flex;
   align-items: center;
@@ -40,19 +36,17 @@
   white-space: nowrap;
 }
 
-/* Estilos del formulario de búsqueda (escritorio) */
 .search-form {
   position: relative;
   width: 100%;
   max-width: 400px;
 }
 
-/* Estilo del formulario de búsqueda (móvil) */
 .search-form-mobile {
   position: relative;
 }
 
-/* Input de búsqueda */
+
 .search-input {
   border-radius: 25px;
   padding: 8px 45px 8px 15px;
@@ -61,7 +55,6 @@
   background-color: white;
 }
 
-/* Botón de búsqueda */
 .search-btn {
   position: absolute;
   right: 8px;
@@ -74,7 +67,6 @@
   border-radius: 50%;
 }
 
-/* Estilos de los iconos (escritorio) */
 .desktop-icons {
   display: flex;
   align-items: center;
@@ -94,12 +86,10 @@
   color: #1cc736 !important;
 }
 
-/* Estilos para la barra de navegación en móvil */
 .mobile-top-row {
   padding: 10px 15px;
 }
 
-/* Estilo del ícono del botón de menú móvil */
 .navbar-toggler {
   border: none;
   padding: 4px 8px;
@@ -109,7 +99,6 @@
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-/* Estilos de los iconos en móvil */
 .mobile-icons {
   display: flex;
   gap: 8px;
@@ -120,7 +109,6 @@
   border-radius: 4px;
 }
 
-/* Botones de navegación en móvil */
 .mobile-nav-buttons {
   display: flex;
   background-color: rgba(255,255,255,0.1);
@@ -147,9 +135,41 @@
   background-color: rgba(255,255,255,0.05);
 }
 
-/* Ajustes responsive para pantallas pequeñas */
 @media (max-width: 991px) {
   .custom-navbar .container-fluid {
     padding: 0;
   }
+}
+.tour-btn-tour{
+  border-radius: 50px;
+  width: 24px;
+  height: 24px;
+  padding: 0 !important;
+  overflow: none !important;
+  background-color: transparent;
+  display:flex;
+  border:none;
+}
+.tour-help{
+  color:#ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-navbar,
+.navbar,
+.navbar-brand-section {
+  position: static !important;
+  overflow: visible !important;
+  z-index: auto !important;
+}
+
+.navbar-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+.driver-popover-footer button{
+  text-shadow:none !important;
 }
