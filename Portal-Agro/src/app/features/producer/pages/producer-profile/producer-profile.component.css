@@ -21,11 +21,13 @@
   border-top-right-radius: 0.5rem;
 }
 
+/* Imagen de perfil */
 .img-profile {
   width: 150px;
   height: 150px;
   object-fit: cover;
   border-radius: 50%;
+  border: 3px solid #eee; /* Agregado para estilo IG */
 }
 
 /* ---------- Contenedor principal ---------- */
@@ -47,50 +49,113 @@
 /* Estética del chip */
 .metrics .mat-mdc-standard-chip {
   font-weight: 600;
-  border-radius: 9999px; /* pill */
+  border-radius: 9999px;
   padding: 6px 10px;
 }
 
 /* Colores por confianza */
 .trust-low {
-  background: #fff3cd;      /* amarillo suave */
+  background: #fff3cd;
   color: #8a6d3b;
   border: 1px solid #ffe69c;
 }
 
 .trust-mid {
-  background: #e7f5ff;      /* azul suave */
+  background: #e7f5ff;
   color: #0c5460;
   border: 1px solid #cfe8ff;
 }
 
 .trust-high {
-  background: #e8f5e9;      /* verde suave */
+  background: #e8f5e9;
   color: #1b5e20;
   border: 1px solid #c8e6c9;
 }
 
 /* ---------- Banda secundaria (.saleNumber) ---------- */
-/* Corrige border, padding y width; centra con flex y auto-margin */
 .saleNumber{
   display: flex;
   align-items: center;
   justify-content: center;
   gap: .5rem;
   padding: .5rem .75rem;
-  background-color: #e8f5e9;   /* igual a trust-high */
+  background-color: #e8f5e9;
   color: #1b5e20;
   border: 1px solid #c8e6c9;
   border-radius: 9999px;
-  width: fit-content;          /* el contenido define el ancho */
-  margin: .5rem auto 0;        /* centra horizontalmente */
+  width: fit-content;
+  margin: .5rem auto 0;
   font-weight: 600;
 }
 
-/* Ajuste visual del icono en línea */
 .saleNumber mat-icon,
 .metrics mat-icon {
   font-size: 20px;
   line-height: 1;
   vertical-align: middle;
+}
+
+/* ----------------------------------------------------- */
+/* ----------- ESTILO INSTAGRAM (nuevo) --------------- */
+/* ----------------------------------------------------- */
+
+/* Métricas tipo Instagram */
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.metric-number {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* Redes sociales tipo burbuja */
+.social-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.social-badge mat-icon {
+  font-size: 22px;
+  color: #444;
+}
+
+.icon-svg {
+  width: 22px;
+  height: 22px;
+}
+
+.social-badge:hover {
+  background: #e1e1e1;
+}
+
+/* Responsive estilo IG */
+@media (max-width: 768px) {
+  .metric-item {
+    margin-bottom: .5rem;
+  }
+
+  .metric-number {
+    font-size: 1.15rem;
+  }
+
+  .img-profile {
+    width: 130px;
+    height: 130px;
+  }
 }
