@@ -13,6 +13,6 @@ export class FooterComponent {
   location: string = 'Neiva, Huila  Colombia';
 
  
-  appDownloadUrl: string = 'https://example.com/app.apk';
+  appDownloadUrl: string = 'https://drive.google.com/uc?export=download&id=1RakTdfsRFpGLm8vooKIt4ge4t_KdaiQO';
 
 }
