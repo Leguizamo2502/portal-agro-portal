@@ -21,14 +21,36 @@
     <span><strong>Dirección:</strong> {{ person?.address || 'No disponible' }}</span>
   </div>
 </div>
+
 <div class="actions-section" id="actions-S">
+
   <h2 class="info-title">Acciones</h2>
+
+  <!-- Toggle de Two-Factor -->
+  <div class="info-item">
+    <mat-icon class="icon">verified_user</mat-icon>
+    <span><strong>Verificación en Dos Pasos:</strong></span>
+
+    <mat-slide-toggle
+      [checked]="person?.isTwoFactorEnabled"
+      [disabled]="isUpdating2FA"
+      (change)="onToggleTwoFactor($event)"
+    >
+    </mat-slide-toggle>
+  </div>
+
   <div class="space-button">
 
-    <app-button id="update-Account-btn" [text]="'Actualizar Información'" [color]="'primary'" [icon]="'edit'"
+    <app-button id="update-Account-btn" 
+      [text]="'Actualizar Información'" 
+      [color]="'primary'" 
+      [icon]="'edit'"
       [redirectTo]="'/account/info/updateDataBasic'" />
 
-    <app-button id="changePassword-btn" [text]="'Cambiar Contraseña'" [color]="'primary'" [icon]="'lock'"
+    <app-button id="changePassword-btn" 
+      [text]="'Cambiar Contraseña'" 
+      [color]="'primary'" 
+      [icon]="'lock'"
       redirectTo="/account/info/changePassword" />
 
   </div>
