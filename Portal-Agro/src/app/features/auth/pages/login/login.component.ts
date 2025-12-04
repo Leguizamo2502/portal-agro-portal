@@ -18,6 +18,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../../Core/services/auth/auth.service';
 import { AuthState } from '../../../../Core/services/auth/auth.state';
 import { finalize, switchMap, take } from 'rxjs/operators';
+import { PENDING_TWO_FACTOR_EMAIL_KEY } from '../../../../Core/constants/auth.constants';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -42,6 +44,7 @@ export class LoginComponent implements OnInit {
   private _servicio = inject(AuthService);
   private _router = inject(Router);
   private _authState = inject(AuthState);
+  private readonly pendingTwoFactorEmailKey = PENDING_TWO_FACTOR_EMAIL_KEY;
 
   loading = false;
 
@@ -91,6 +94,8 @@ export class LoginComponent implements OnInit {
     };
 
     this.loading = true;
+    // Limpia cualquier estado previo de 2FA
+    this.clearPendingTwoFactorEmail();
 
     // Muestra alerta con spinner
     Swal.fire({
@@ -102,15 +107,32 @@ export class LoginComponent implements OnInit {
       },
     });
 
+    let requiresTwoFactor = false;
+
     this._servicio
       .Login(objeto)
       .pipe(
         take(1),
-        switchMap(() => this._authState.loadMe()),
+        switchMap((response) => {
+          requiresTwoFactor = response?.requiresTwoFactor;
+
+          if (requiresTwoFactor) {
+            this.cachePendingTwoFactorEmail(objeto.email);
+            return of(null);
+          }
+
+          return this._authState.loadMe();
+        }),
         finalize(() => (this.loading = false))
       )
       .subscribe({
         next: (me) => {
+          Swal.close();
+
+          if (requiresTwoFactor) {
+            this.redirectToTwoFactor(objeto.email);
+            return;
+          }
           if (!me) {
             Swal.fire({
               icon: 'error',
@@ -127,6 +149,7 @@ export class LoginComponent implements OnInit {
           });
         },
         error: (err) => {
+          Swal.close();
           const msg =
             err?.status === 401
               ? 'Credenciales inválidas o correo no verificado.'
@@ -134,5 +157,32 @@ export class LoginComponent implements OnInit {
           Swal.fire({ icon: 'error', title: 'Oops...', text: msg });
         },
       });
+  }
+  private cachePendingTwoFactorEmail(email: string) {
+    try {
+      sessionStorage.setItem(this.pendingTwoFactorEmailKey, email);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  private clearPendingTwoFactorEmail() {
+    try {
+      sessionStorage.removeItem(this.pendingTwoFactorEmailKey);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  private redirectToTwoFactor(email: string) {
+    Swal.fire({
+      icon: 'info',
+      title: 'Verificación requerida',
+      text: 'Ingresa el código enviado a tu correo.',
+    });
+
+    this._router.navigate(['/auth/two-factor'], {
+      state: { email },
+    });
   }
 }

@@ -9,6 +9,17 @@ export interface LoginResponseModel {
     roles: string[];
 }
 
+export interface LoginAttemptResponse {
+  isSuccess: boolean;
+  requiresTwoFactor: boolean;
+  message: string;
+}
+
+export interface TwoFactorVerificationModel {
+  email: string;
+  code: string;
+}
+
 // core/auth/auth.models.ts
 export interface UserMeDto {
   id: number;

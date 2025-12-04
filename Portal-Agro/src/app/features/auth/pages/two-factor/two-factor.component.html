@@ -1,0 +1,47 @@
+<div class="container-fluid vh-100 fondo-auth">
+  <div class="row h-100">
+    <!-- Columna izquierda -->
+    <div class="col-md-6 d-none d-md-flex flex-column justify-content-center align-items-center text-white">
+      <img src="logos/logo.png" alt="Logo" class="mb-4" style="width: 200px;" />
+      <h2 class="text-center">Portal Agro-comercial del Huila</h2>
+    </div>
+
+    <!-- Columna derecha (formulario) -->
+    <div class="col-md-6 d-flex justify-content-center align-items-center">
+      <div class="w-75 w-md-75 w-lg-50 p-4 shadow bg-white formaForm">
+        <h3 class="text-center mb-3 titleForm">Verificación en dos pasos</h3>
+        <p class="text-center mb-4">
+          Ingresa el código enviado a <strong>{{ email }}</strong> para continuar.
+        </p>
+
+        <form [formGroup]="formCode" (ngSubmit)="confirmCode()">
+          <div class="mb-3">
+            <label for="code" class="form-label">Código de verificación</label>
+            <input
+              id="code"
+              type="text"
+              inputmode="numeric"
+              maxlength="6"
+              autocomplete="one-time-code"
+              formControlName="code"
+              class="form-control input-custom"
+              placeholder="Ej: 123456"
+            />
+            <div *ngIf="codeControl?.invalid && codeControl?.touched" class="text-danger small">
+              {{ getErrorMessage('code') }}
+            </div>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button type="submit" [disabled]="formCode.invalid || loading" class="btn btn-success btn-custom">
+              Verificar código
+            </button>
+            <button type="button" class="btn btn-outline-secondary" routerLink="/auth/login">
+              Volver al inicio de sesión
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

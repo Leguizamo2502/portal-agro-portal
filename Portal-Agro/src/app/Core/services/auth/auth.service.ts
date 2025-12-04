@@ -2,7 +2,7 @@ import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
-import { LoginModel, LoginResponseModel, UserMeDto } from '../../Models/login.model';
+import { LoginAttemptResponse, LoginModel, LoginResponseModel, TwoFactorVerificationModel, UserMeDto } from '../../Models/login.model';
 import { ConfirmEmailVerificationModel, RegisterUserModel, RequestEmailVerificationModel } from '../../Models/registeruser.model';
 import { PersonUpdateModel, UserSelectModel } from '../../Models/user.model';
 import { ChangePasswordModel, RecoverPasswordConfirmModel, RecoverPasswordModel } from '../../Models/changePassword.model';
@@ -21,8 +21,11 @@ export class AuthService {
     return this.http.post<any>(this.urlBase + 'Register', Objeto);
   }
 
-  Login(Objeto: LoginModel): Observable<any> {
-    return this.http.post<any>(this.urlBase + 'login', Objeto);
+  Login(Objeto: LoginModel): Observable<LoginAttemptResponse> {
+    return this.http.post<LoginAttemptResponse>(this.urlBase + 'login', Objeto);
+  }
+  ConfirmTwoFactorLogin(Objeto: TwoFactorVerificationModel): Observable<any> {
+    return this.http.post<any>(this.urlBase + 'login/two-factor', Objeto);
   }
 
   ChangePassword(Objeto: ChangePasswordModel): Observable<any> {
@@ -70,6 +73,10 @@ export class AuthService {
 
   ConfirmEmailVerification(objeto: ConfirmEmailVerificationModel): Observable<any> {
     return this.http.post<any>(this.urlBase + 'verify/confirm', objeto);
+  }
+
+    UpdateTwoFactorPreference(enable: boolean): Observable<any> {
+    return this.http.put<any>(this.urlBase + 'two-factor', { enable });
   }
 
   
